@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GestiLoisirs Pro v3</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F0F4F8;--card:#fff;--sb:#0E1B2E;--acc:#1A5FD4;--accl:#EFF6FF;--gr:#059669;--grl:#D1FAE5;--or:#D97706;--orl:#FEF3C7;--rd:#DC2626;--rdl:#FEE2E2;--pu:#7C3AED;--pul:#EDE9FE;--te:#0891B2;--tel:#CFFAFE;--tx:#0F172A;--tx2:#475569;--tx3:#94A3B8;--bd:#E2E8F0;--sh:0 1px 3px rgba(0,0,0,.07);--shl:0 8px 32px rgba(0,0,0,.12);--r:10px;}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--tx);display:flex;min-height:100vh;font-size:13px;}
+::-webkit-scrollbar{width:4px;height:4px;}::-webkit-scrollbar-thumb{background:#CBD5E1;border-radius:4px;}
+#login-screen{position:fixed;inset:0;background:linear-gradient(135deg,#0E1B2E,#1A3A6E);z-index:1000;display:flex;align-items:center;justify-content:center;}
+.lbox{background:rgba(255,255,255,.08);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:36px;width:360px;max-width:95vw;text-align:center;}
+.llogo{font-size:2.2rem;margin-bottom:10px;}.ltitle{font-size:1.3rem;font-weight:800;color:#fff;margin-bottom:3px;}.lsub{font-size:.78rem;color:rgba(255,255,255,.45);margin-bottom:24px;}
+.ltabs{display:flex;background:rgba(255,255,255,.08);border-radius:9px;padding:3px;margin-bottom:20px;gap:3px;}
+.ltab{flex:1;padding:7px;border-radius:7px;cursor:pointer;font-size:.76rem;font-weight:600;color:rgba(255,255,255,.45);transition:all .15s;}
+.ltab.on{background:var(--acc);color:#fff;}
+.lform{display:flex;flex-direction:column;gap:9px;}
+.lin{padding:10px 13px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);border-radius:8px;font-family:'Sora',sans-serif;font-size:.82rem;color:#fff;outline:none;}
+.lin::placeholder{color:rgba(255,255,255,.3);}.lin:focus{border-color:var(--acc);}
+.lbtn{padding:11px;background:var(--acc);color:#fff;border:none;border-radius:8px;font-family:'Sora',sans-serif;font-size:.85rem;font-weight:700;cursor:pointer;margin-top:3px;}
+.pusers{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
+.puser{display:flex;align-items:center;gap:9px;padding:8px 11px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:8px;cursor:pointer;transition:all .15s;}
+.puser:hover,.puser.sel{background:rgba(26,95,212,.3);border-color:var(--acc);}
+.puser-n{font-size:.8rem;font-weight:600;color:#fff;}.puser-r{font-size:.66rem;color:rgba(255,255,255,.4);}
+.pin-disp{display:flex;gap:7px;justify-content:center;margin-bottom:14px;}
+.pin-dot{width:11px;height:11px;border-radius:50%;background:rgba(255,255,255,.18);transition:background .15s;}
+.pin-dot.on{background:var(--acc);}
+.pin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;}
+.pkey{padding:13px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.13);border-radius:8px;font-size:.95rem;font-weight:700;color:#fff;cursor:pointer;transition:all .15s;text-align:center;}
+.pkey:hover{background:rgba(255,255,255,.18);}
+#sb{width:216px;min-height:100vh;background:var(--sb);position:fixed;left:0;top:0;bottom:0;z-index:200;display:flex;flex-direction:column;overflow-y:auto;}
+.sbl{padding:17px 14px 14px;border-bottom:1px solid rgba(255,255,255,.06);}
+.sbl-i{display:flex;align-items:center;gap:9px;}
+.sbl-ic{width:31px;height:31px;border-radius:7px;background:linear-gradient(135deg,var(--acc),#0EA5E9);display:flex;align-items:center;justify-content:center;font-size:.95rem;}
+.sbl-t{font-size:.9rem;font-weight:800;color:#fff;}.sbl-s{font-size:.58rem;color:rgba(255,255,255,.28);}
+.ss{padding:12px 13px 2px;font-size:.57rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.2);}
+.ni{display:flex;align-items:center;gap:8px;padding:7px 10px;margin:1px 5px;border-radius:7px;cursor:pointer;color:rgba(255,255,255,.46);font-weight:500;font-size:.78rem;transition:all .15s;}
+.ni:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.82);}.ni.on{background:var(--acc);color:#fff;}
+.ni .ic{font-size:.82rem;width:15px;text-align:center;flex-shrink:0;}
+.nb{margin-left:auto;background:var(--rd);color:#fff;font-size:.57rem;font-weight:800;padding:1px 5px;border-radius:6px;min-width:14px;text-align:center;}
+.ni.on .nb{background:rgba(255,255,255,.22);}
+.sbf{margin-top:auto;padding:11px 8px;border-top:1px solid rgba(255,255,255,.06);}
+.sbup{display:flex;align-items:center;gap:8px;padding:6px 7px;border-radius:7px;cursor:pointer;}.sbup:hover{background:rgba(255,255,255,.06);}
+#main{margin-left:216px;flex:1;display:flex;flex-direction:column;min-height:100vh;}
+.topbar{height:50px;background:var(--card);border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;padding:0 20px;position:sticky;top:0;z-index:100;gap:10px;}
+.tbt{font-weight:800;font-size:.93rem;}.tbr{display:flex;align-items:center;gap:6px;}
+.icb{width:29px;height:29px;border-radius:7px;background:var(--bg);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.8rem;position:relative;}
+.icb:hover{background:var(--bd);}
+.ndot{width:6px;height:6px;border-radius:50%;background:var(--rd);border:1.5px solid var(--card);position:absolute;top:4px;right:4px;}
+#content{padding:18px 20px;flex:1;}
+.view{display:none;}.view.active{display:block;animation:fi .16s ease;}
+@keyframes fi{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:none;}}
+.av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.68rem;flex-shrink:0;}
+.abl{background:var(--accl);color:var(--acc);}.agr{background:var(--grl);color:var(--gr);}
+.aor{background:var(--orl);color:var(--or);}.apu{background:var(--pul);color:var(--pu);}.ate{background:var(--tel);color:var(--te);}
+.ph{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;}
+.ph h1{font-size:1.15rem;font-weight:800;}.ph p{font-size:.71rem;color:var(--tx3);margin-top:2px;}
+.ha{display:flex;gap:6px;align-items:center;flex-shrink:0;}
+.btn{display:inline-flex;align-items:center;gap:4px;padding:6px 12px;border-radius:var(--r);border:none;cursor:pointer;font-family:'Sora',sans-serif;font-size:.74rem;font-weight:600;transition:all .14s;white-space:nowrap;}
+.btn:active{transform:scale(.97);}
+.bp{background:var(--acc);color:#fff;}.bp:hover{background:#1558C0;}
+.bg2{background:var(--card);color:var(--tx2);border:1px solid var(--bd);}.bg2:hover{background:var(--bg);}
+.bgr{background:var(--gr);color:#fff;}.bgr:hover{background:#047857;}
+.brd{background:var(--rd);color:#fff;}.bpu{background:var(--pu);color:#fff;}.bor{background:var(--or);color:#fff;}
+.bsm{padding:4px 9px;font-size:.69rem;}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:11px;box-shadow:var(--sh);}
+.ch{padding:11px 14px;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;align-items:center;}
+.ct{font-weight:700;font-size:.84rem;}.cs{font-size:.69rem;color:var(--tx3);}.cb{padding:14px;}
+.krow{display:grid;gap:11px;margin-bottom:16px;}
+.k5{grid-template-columns:repeat(5,1fr);}.k4{grid-template-columns:repeat(4,1fr);}.k3{grid-template-columns:repeat(3,1fr);}
+.kpi{background:var(--card);border:1px solid var(--bd);border-radius:11px;padding:12px 14px;box-shadow:var(--sh);}
+.kt{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.kv{font-size:1.5rem;font-weight:800;line-height:1;}.kl{font-size:.64rem;color:var(--tx3);font-weight:500;margin-top:2px;}
+.ktr{font-size:.62rem;font-weight:700;padding:2px 5px;border-radius:10px;}.tu{background:var(--grl);color:var(--gr);}.td{background:var(--rdl);color:var(--rd);}
+.tag{display:inline-flex;align-items:center;padding:2px 7px;border-radius:10px;font-size:.63rem;font-weight:700;white-space:nowrap;}
+.tg{background:var(--grl);color:var(--gr);}.to{background:var(--orl);color:var(--or);}.tr2{background:var(--rdl);color:var(--rd);}
+.tb2{background:var(--accl);color:var(--acc);}.tp{background:var(--pul);color:var(--pu);}.tt{background:var(--tel);color:var(--te);}.tgr{background:var(--bg);color:var(--tx3);}
+table{width:100%;border-collapse:collapse;}
+thead tr{background:#F8FAFC;}
+th{padding:8px 11px;text-align:left;font-size:.62rem;text-transform:uppercase;letter-spacing:.06em;color:var(--tx3);font-weight:700;border-bottom:1px solid var(--bd);white-space:nowrap;}
+td{padding:8px 11px;border-bottom:1px solid var(--bd);font-size:.77rem;color:var(--tx2);vertical-align:middle;}
+tbody tr:last-child td{border-bottom:none;}tbody tr:hover td{background:#FAFBFC;}td strong{color:var(--tx);font-weight:600;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:13px;}.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:11px;}.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;}
+.mb14{margin-bottom:14px;}.mb18{margin-bottom:18px;}
+.tbar{display:flex;gap:7px;align-items:center;margin-bottom:12px;flex-wrap:wrap;}
+.sbox{flex:1;min-width:160px;display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:0 10px;}
+.sbox input{border:none;outline:none;background:transparent;font-family:'Sora',sans-serif;font-size:.77rem;color:var(--tx);width:100%;padding:7px 0;}
+.fsel{padding:7px 10px;background:var(--card);border:1px solid var(--bd);border-radius:var(--r);font-family:'Sora',sans-serif;font-size:.74rem;color:var(--tx2);outline:none;cursor:pointer;}
+.tabs{display:flex;border-bottom:2px solid var(--bd);margin-bottom:15px;}
+.tab{padding:7px 13px;cursor:pointer;font-size:.76rem;font-weight:600;color:var(--tx3);border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .14s;}
+.tab:hover{color:var(--tx2);}.tab.on{color:var(--acc);border-bottom-color:var(--acc);}
+.mbg{position:fixed;inset:0;background:rgba(15,27,46,.52);backdrop-filter:blur(4px);z-index:500;display:none;align-items:center;justify-content:center;padding:16px;}
+.mbg.open{display:flex;}
+.modal{background:var(--card);border-radius:13px;box-shadow:var(--shl);width:560px;max-width:100%;max-height:92vh;overflow-y:auto;animation:mi .17s ease;}
+@keyframes mi{from{opacity:0;transform:scale(.96) translateY(8px);}to{opacity:1;transform:none;}}
+.mh{padding:15px 20px 12px;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;align-items:center;}
+.mh h2{font-size:.9rem;font-weight:800;}
+.mcl{width:24px;height:24px;border-radius:5px;background:var(--bg);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:var(--tx3);}
+.mcl:hover{background:var(--bd);}
+.mb2{padding:15px 20px;}.mf{padding:10px 20px;border-top:1px solid var(--bd);display:flex;justify-content:flex-end;gap:6px;}
+.fg{margin-bottom:10px;}
+.fg label{display:block;font-size:.66rem;font-weight:700;color:var(--tx2);margin-bottom:3px;text-transform:uppercase;letter-spacing:.04em;}
+.fg input,.fg select,.fg textarea{width:100%;padding:7px 10px;background:var(--bg);border:1px solid var(--bd);border-radius:7px;font-family:'Sora',sans-serif;font-size:.77rem;color:var(--tx);outline:none;transition:border-color .14s;}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(26,95,212,.1);}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+.fsep{font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--acc);padding:4px 0 2px;border-bottom:1px solid var(--accl);margin-bottom:10px;}
+.prow{display:flex;align-items:center;gap:9px;padding:8px 11px;border:1px solid var(--bd);border-radius:8px;background:var(--card);margin-bottom:4px;transition:all .12s;}
+.prow.pr{border-color:var(--gr);background:var(--grl);}.prow.ab{border-color:var(--rd);background:var(--rdl);}.prow.lat{border-color:var(--or);background:var(--orl);}
+.ptgl{margin-left:auto;display:flex;gap:4px;}
+.pt{padding:3px 9px;border-radius:5px;border:1px solid var(--bd);cursor:pointer;font-size:.67rem;font-weight:700;background:var(--card);transition:all .14s;font-family:'Sora',sans-serif;}
+.pt.yes{background:var(--gr);color:#fff;border-color:var(--gr);}.pt.no{background:var(--rd);color:#fff;border-color:var(--rd);}.pt.lat2{background:var(--or);color:#fff;border-color:var(--or);}
+.anim-view{background:var(--sb);border-radius:13px;padding:20px;color:#fff;}
+.av-week{display:grid;grid-template-columns:repeat(7,1fr);gap:7px;margin-top:14px;}
+.av-day{background:rgba(255,255,255,.07);border-radius:9px;padding:10px 7px;text-align:center;}
+.av-day.today{background:var(--acc);}.av-day-n{font-size:.62rem;font-weight:700;opacity:.55;text-transform:uppercase;}.av-day-d{font-size:.75rem;font-weight:700;margin:2px 0;}
+.av-sl{background:rgba(255,255,255,.1);border-radius:4px;padding:2px 4px;font-size:.6rem;margin-top:3px;font-weight:600;}
+.av-sl.peri{background:rgba(26,95,212,.4);}.av-sl.mer{background:rgba(5,150,105,.4);}.av-sl.vac{background:rgba(8,145,178,.4);}.av-sl.rep{background:rgba(255,255,255,.05);opacity:.5;}.av-sl.cng{background:rgba(217,119,6,.4);}
+.pg{display:grid;gap:2px;}
+.pgh{background:var(--sb);color:rgba(255,255,255,.72);padding:6px 4px;text-align:center;font-size:.6rem;font-weight:700;border-radius:5px;}
+.pgn{background:var(--card);border:1px solid var(--bd);padding:5px 8px;border-radius:5px;font-weight:600;font-size:.68rem;display:flex;align-items:center;gap:5px;}
+.pgc{background:var(--card);border:1px solid var(--bd);border-radius:5px;min-height:44px;padding:3px;cursor:pointer;display:flex;flex-direction:column;gap:2px;}
+.pgc:hover{background:var(--accl);border-color:var(--acc);}
+.pgs{border-radius:3px;padding:2px 3px;font-size:.58rem;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.pgs.peri{background:var(--accl);color:var(--acc);}.pgs.mer{background:var(--grl);color:var(--gr);}.pgs.vac{background:var(--tel);color:var(--te);}.pgs.rep{background:var(--bg);color:var(--tx3);}.pgs.cng{background:var(--orl);color:var(--or);}
+.hsum{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:13px;}
+.hsi{background:var(--bg);border-radius:7px;padding:8px 10px;}.hsl{font-size:.59rem;color:var(--tx3);font-weight:700;text-transform:uppercase;}.hsv{font-size:.92rem;font-weight:800;margin-top:1px;}
+.enc{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:6px;font-size:.68rem;font-weight:700;}
+.eok{background:var(--grl);color:var(--gr);}.ewarn{background:var(--orl);color:var(--or);}
+.pbar{height:4px;background:var(--bg);border-radius:3px;overflow:hidden;}
+.pfill{height:100%;border-radius:3px;transition:width .3s;}.pbl{background:var(--acc);}.pgr2{background:var(--gr);}.por{background:var(--or);}
+.abox{display:flex;align-items:flex-start;gap:8px;padding:8px 10px;background:var(--bg);border-radius:7px;margin-bottom:5px;font-size:.74rem;}
+.abox.ard{background:var(--rdl);border-left:3px solid var(--rd);}.abox.aor{background:var(--orl);border-left:3px solid var(--or);}.abox.abl{background:var(--accl);border-left:3px solid var(--acc);}.abox.agr{background:var(--grl);border-left:3px solid var(--gr);}
+.np{position:fixed;right:14px;top:58px;width:305px;background:var(--card);border:1px solid var(--bd);border-radius:11px;box-shadow:var(--shl);z-index:400;display:none;max-height:70vh;overflow-y:auto;}
+.np.open{display:block;animation:mi .14s ease;}
+.nph{padding:10px 14px;border-bottom:1px solid var(--bd);font-weight:700;font-size:.8rem;display:flex;justify-content:space-between;align-items:center;}
+.ni2{padding:9px 14px;border-bottom:1px solid var(--bd);display:flex;gap:9px;cursor:pointer;}.ni2:hover{background:var(--bg);}.ni2.unr{background:#F0F7FF;}.ni2:last-child{border-bottom:none;}
+.ni2t{font-size:.74rem;color:var(--tx2);}.ni2t strong{color:var(--tx);display:block;font-size:.76rem;}.ni2tm{font-size:.62rem;color:var(--tx3);margin-top:1px;}
+.elay{display:grid;grid-template-columns:245px 1fr;height:calc(100vh - 118px);}
+.elist{border-right:1px solid var(--bd);overflow-y:auto;}
+.eitem{padding:10px 12px;border-bottom:1px solid var(--bd);cursor:pointer;}.eitem:hover{background:var(--bg);}.eitem.on{background:var(--accl);border-left:2px solid var(--acc);}.eitem.unr .esnd{font-weight:800;color:var(--tx);}
+.esnd{font-size:.75rem;color:var(--tx2);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.esbj{font-size:.69rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:1px;}
+.eprev{font-size:.64rem;color:var(--tx3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.etim{font-size:.6rem;color:var(--tx3);float:right;}
+.ebody{padding:18px;overflow-y:auto;}.eempty{display:flex;align-items:center;justify-content:center;height:100%;color:var(--tx3);font-size:.8rem;}
+.cf-card{background:linear-gradient(135deg,#0E1B2E,#1A3A6E);border-radius:12px;padding:20px;color:#fff;margin-bottom:11px;}
+.cf-btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
+.cf-btn{padding:8px 14px;background:rgba(255,255,255,.11);border:1px solid rgba(255,255,255,.18);border-radius:7px;color:#fff;font-family:'Sora',sans-serif;font-size:.75rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px;}
+.cf-btn:hover{background:rgba(255,255,255,.2);}
+.cc{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:14px;margin-bottom:9px;}
+.cc-top{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.cc-name{font-weight:700;font-size:.84rem;}.cc-role{font-size:.67rem;color:var(--tx3);}
+.cc-det{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:8px;}
+.cd{background:var(--bg);border-radius:6px;padding:6px 8px;}.cdl{font-size:.59rem;color:var(--tx3);font-weight:700;text-transform:uppercase;}.cdv{font-size:.77rem;font-weight:700;margin-top:1px;}
+.hvac{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:14px;margin-bottom:9px;}
+.bchart{display:flex;align-items:flex-end;gap:6px;height:65px;}
+.bitem{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;}.bbar{width:100%;border-radius:3px 3px 0 0;}.blbl,.bval{font-size:.58rem;color:var(--tx3);}
+#toast{position:fixed;bottom:16px;right:16px;z-index:600;background:var(--sb);color:#fff;padding:9px 14px;border-radius:8px;font-size:.77rem;font-weight:600;box-shadow:var(--shl);transform:translateY(55px);opacity:0;transition:all .22s cubic-bezier(.34,1.56,.64,1);pointer-events:none;max-width:290px;}
+#toast.show{transform:none;opacity:1;}
+</style>
+</head>
+<body>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GestiLoisirs Pro v3</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F0F4F8;--card:#fff;--sb:#0E1B2E;--acc:#1A5FD4;--accl:#EFF6FF;--gr:#059669;--grl:#D1FAE5;--or:#D97706;--orl:#FEF3C7;--rd:#DC2626;--rdl:#FEE2E2;--pu:#7C3AED;--pul:#EDE9FE;--te:#0891B2;--tel:#CFFAFE;--tx:#0F172A;--tx2:#475569;--tx3:#94A3B8;--bd:#E2E8F0;--sh:0 1px 3px rgba(0,0,0,.07);--shl:0 8px 32px rgba(0,0,0,.12);--r:10px;}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--tx);display:flex;min-height:100vh;font-size:13px;}
+::-webkit-scrollbar{width:4px;height:4px;}::-webkit-scrollbar-thumb{background:#CBD5E1;border-radius:4px;}
+#login-screen{position:fixed;inset:0;background:linear-gradient(135deg,#0E1B2E,#1A3A6E);z-index:1000;display:flex;align-items:center;justify-content:center;}
+.lbox{background:rgba(255,255,255,.08);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:36px;width:360px;max-width:95vw;text-align:center;}
+.llogo{font-size:2.2rem;margin-bottom:10px;}.ltitle{font-size:1.3rem;font-weight:800;color:#fff;margin-bottom:3px;}.lsub{font-size:.78rem;color:rgba(255,255,255,.45);margin-bottom:24px;}
+.ltabs{display:flex;background:rgba(255,255,255,.08);border-radius:9px;padding:3px;margin-bottom:20px;gap:3px;}
+.ltab{flex:1;padding:7px;border-radius:7px;cursor:pointer;font-size:.76rem;font-weight:600;color:rgba(255,255,255,.45);transition:all .15s;}
+.ltab.on{background:var(--acc);color:#fff;}
+.lform{display:flex;flex-direction:column;gap:9px;}
+.lin{padding:10px 13px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);border-radius:8px;font-family:'Sora',sans-serif;font-size:.82rem;color:#fff;outline:none;}
+.lin::placeholder{color:rgba(255,255,255,.3);}.lin:focus{border-color:var(--acc);}
+.lbtn{padding:11px;background:var(--acc);color:#fff;border:none;border-radius:8px;font-family:'Sora',sans-serif;font-size:.85rem;font-weight:700;cursor:pointer;margin-top:3px;}
+.pusers{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
+.puser{display:flex;align-items:center;gap:9px;padding:8px 11px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:8px;cursor:pointer;transition:all .15s;}
+.puser:hover,.puser.sel{background:rgba(26,95,212,.3);border-color:var(--acc);}
+.puser-n{font-size:.8rem;font-weight:600;color:#fff;}.puser-r{font-size:.66rem;color:rgba(255,255,255,.4);}
+.pin-disp{display:flex;gap:7px;justify-content:center;margin-bottom:14px;}
+.pin-dot{width:11px;height:11px;border-radius:50%;background:rgba(255,255,255,.18);transition:background .15s;}
+.pin-dot.on{background:var(--acc);}
+.pin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;}
+.pkey{padding:13px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.13);border-radius:8px;font-size:.95rem;font-weight:700;color:#fff;cursor:pointer;transition:all .15s;text-align:center;}
+.pkey:hover{background:rgba(255,255,255,.18);}
+#sb{width:216px;min-height:100vh;background:var(--sb);position:fixed;left:0;top:0;bottom:0;z-index:200;display:flex;flex-direction:column;overflow-y:auto;}
+.sbl{padding:17px 14px 14px;border-bottom:1px solid rgba(255,255,255,.06);}
+.sbl-i{display:flex;align-items:center;gap:9px;}
+.sbl-ic{width:31px;height:31px;border-radius:7px;background:linear-gradient(135deg,var(--acc),#0EA5E9);display:flex;align-items:center;justify-content:center;font-size:.95rem;}
+.sbl-t{font-size:.9rem;font-weight:800;color:#fff;}.sbl-s{font-size:.58rem;color:rgba(255,255,255,.28);}
+.ss{padding:12px 13px 2px;font-size:.57rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.2);}
+.ni{display:flex;align-items:center;gap:8px;padding:7px 10px;margin:1px 5px;border-radius:7px;cursor:pointer;color:rgba(255,255,255,.46);font-weight:500;font-size:.78rem;transition:all .15s;}
+.ni:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.82);}.ni.on{background:var(--acc);color:#fff;}
+.ni .ic{font-size:.82rem;width:15px;text-align:center;flex-shrink:0;}
+.nb{margin-left:auto;background:var(--rd);color:#fff;font-size:.57rem;font-weight:800;padding:1px 5px;border-radius:6px;min-width:14px;text-align:center;}
+.ni.on .nb{background:rgba(255,255,255,.22);}
+.sbf{margin-top:auto;padding:11px 8px;border-top:1px solid rgba(255,255,255,.06);}
+.sbup{display:flex;align-items:center;gap:8px;padding:6px 7px;border-radius:7px;cursor:pointer;}.sbup:hover{background:rgba(255,255,255,.06);}
+#main{margin-left:216px;flex:1;display:flex;flex-direction:column;min-height:100vh;}
+.topbar{height:50px;background:var(--card);border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;padding:0 20px;position:sticky;top:0;z-index:100;gap:10px;}
+.tbt{font-weight:800;font-size:.93rem;}.tbr{display:flex;align-items:center;gap:6px;}
+.icb{width:29px;height:29px;border-radius:7px;background:var(--bg);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.8rem;position:relative;}
+.icb:hover{background:var(--bd);}
+.ndot{width:6px;height:6px;border-radius:50%;background:var(--rd);border:1.5px solid var(--card);position:absolute;top:4px;right:4px;}
+#content{padding:18px 20px;flex:1;}
+.view{display:none;}.view.active{display:block;animation:fi .16s ease;}
+@keyframes fi{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:none;}}
+.av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.68rem;flex-shrink:0;}
+.abl{background:var(--accl);color:var(--acc);}.agr{background:var(--grl);color:var(--gr);}
+.aor{background:var(--orl);color:var(--or);}.apu{background:var(--pul);color:var(--pu);}.ate{background:var(--tel);color:var(--te);}
+.ph{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;}
+.ph h1{font-size:1.15rem;font-weight:800;}.ph p{font-size:.71rem;color:var(--tx3);margin-top:2px;}
+.ha{display:flex;gap:6px;align-items:center;flex-shrink:0;}
+.btn{display:inline-flex;align-items:center;gap:4px;padding:6px 12px;border-radius:var(--r);border:none;cursor:pointer;font-family:'Sora',sans-serif;font-size:.74rem;font-weight:600;transition:all .14s;white-space:nowrap;}
+.btn:active{transform:scale(.97);}
+.bp{background:var(--acc);color:#fff;}.bp:hover{background:#1558C0;}
+.bg2{background:var(--card);color:var(--tx2);border:1px solid var(--bd);}.bg2:hover{background:var(--bg);}
+.bgr{background:var(--gr);color:#fff;}.bgr:hover{background:#047857;}
+.brd{background:var(--rd);color:#fff;}.bpu{background:var(--pu);color:#fff;}.bor{background:var(--or);color:#fff;}
+.bsm{padding:4px 9px;font-size:.69rem;}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:11px;box-shadow:var(--sh);}
+.ch{padding:11px 14px;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;align-items:center;}
+.ct{font-weight:700;font-size:.84rem;}.cs{font-size:.69rem;color:var(--tx3);}.cb{padding:14px;}
+.krow{display:grid;gap:11px;margin-bottom:16px;}
+.k5{grid-template-columns:repeat(5,1fr);}.k4{grid-template-columns:repeat(4,1fr);}.k3{grid-template-columns:repeat(3,1fr);}
+.kpi{background:var(--card);border:1px solid var(--bd);border-radius:11px;padding:12px 14px;box-shadow:var(--sh);}
+.kt{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.kv{font-size:1.5rem;font-weight:800;line-height:1;}.kl{font-size:.64rem;color:var(--tx3);font-weight:500;margin-top:2px;}
+.ktr{font-size:.62rem;font-weight:700;padding:2px 5px;border-radius:10px;}.tu{background:var(--grl);color:var(--gr);}.td{background:var(--rdl);color:var(--rd);}
+.tag{display:inline-flex;align-items:center;padding:2px 7px;border-radius:10px;font-size:.63rem;font-weight:700;white-space:nowrap;}
+.tg{background:var(--grl);color:var(--gr);}.to{background:var(--orl);color:var(--or);}.tr2{background:var(--rdl);color:var(--rd);}
+.tb2{background:var(--accl);color:var(--acc);}.tp{background:var(--pul);color:var(--pu);}.tt{background:var(--tel);color:var(--te);}.tgr{background:var(--bg);color:var(--tx3);}
+table{width:100%;border-collapse:collapse;}
+thead tr{background:#F8FAFC;}
+th{padding:8px 11px;text-align:left;font-size:.62rem;text-transform:uppercase;letter-spacing:.06em;color:var(--tx3);font-weight:700;border-bottom:1px solid var(--bd);white-space:nowrap;}
+td{padding:8px 11px;border-bottom:1px solid var(--bd);font-size:.77rem;color:var(--tx2);vertical-align:middle;}
+tbody tr:last-child td{border-bottom:none;}tbody tr:hover td{background:#FAFBFC;}td strong{color:var(--tx);font-weight:600;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:13px;}.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:11px;}.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;}
+.mb14{margin-bottom:14px;}.mb18{margin-bottom:18px;}
+.tbar{display:flex;gap:7px;align-items:center;margin-bottom:12px;flex-wrap:wrap;}
+.sbox{flex:1;min-width:160px;display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:0 10px;}
+.sbox input{border:none;outline:none;background:transparent;font-family:'Sora',sans-serif;font-size:.77rem;color:var(--tx);width:100%;padding:7px 0;}
+.fsel{padding:7px 10px;background:var(--card);border:1px solid var(--bd);border-radius:var(--r);font-family:'Sora',sans-serif;font-size:.74rem;color:var(--tx2);outline:none;cursor:pointer;}
+.tabs{display:flex;border-bottom:2px solid var(--bd);margin-bottom:15px;}
+.tab{padding:7px 13px;cursor:pointer;font-size:.76rem;font-weight:600;color:var(--tx3);border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .14s;}
+.tab:hover{color:var(--tx2);}.tab.on{color:var(--acc);border-bottom-color:var(--acc);}
+.mbg{position:fixed;inset:0;background:rgba(15,27,46,.52);backdrop-filter:blur(4px);z-index:500;display:none;align-items:center;justify-content:center;padding:16px;}
+.mbg.open{display:flex;}
+.modal{background:var(--card);border-radius:13px;box-shadow:var(--shl);width:560px;max-width:100%;max-height:92vh;overflow-y:auto;animation:mi .17s ease;}
+@keyframes mi{from{opacity:0;transform:scale(.96) translateY(8px);}to{opacity:1;transform:none;}}
+.mh{padding:15px 20px 12px;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;align-items:center;}
+.mh h2{font-size:.9rem;font-weight:800;}
+.mcl{width:24px;height:24px;border-radius:5px;background:var(--bg);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:var(--tx3);}
+.mcl:hover{background:var(--bd);}
+.mb2{padding:15px 20px;}.mf{padding:10px 20px;border-top:1px solid var(--bd);display:flex;justify-content:flex-end;gap:6px;}
+.fg{margin-bottom:10px;}
+.fg label{display:block;font-size:.66rem;font-weight:700;color:var(--tx2);margin-bottom:3px;text-transform:uppercase;letter-spacing:.04em;}
+.fg input,.fg select,.fg textarea{width:100%;padding:7px 10px;background:var(--bg);border:1px solid var(--bd);border-radius:7px;font-family:'Sora',sans-serif;font-size:.77rem;color:var(--tx);outline:none;transition:border-color .14s;}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(26,95,212,.1);}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+.fsep{font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--acc);padding:4px 0 2px;border-bottom:1px solid var(--accl);margin-bottom:10px;}
+.prow{display:flex;align-items:center;gap:9px;padding:8px 11px;border:1px solid var(--bd);border-radius:8px;background:var(--card);margin-bottom:4px;transition:all .12s;}
+.prow.pr{border-color:var(--gr);background:var(--grl);}.prow.ab{border-color:var(--rd);background:var(--rdl);}.prow.lat{border-color:var(--or);background:var(--orl);}
+.ptgl{margin-left:auto;display:flex;gap:4px;}
+.pt{padding:3px 9px;border-radius:5px;border:1px solid var(--bd);cursor:pointer;font-size:.67rem;font-weight:700;background:var(--card);transition:all .14s;font-family:'Sora',sans-serif;}
+.pt.yes{background:var(--gr);color:#fff;border-color:var(--gr);}.pt.no{background:var(--rd);color:#fff;border-color:var(--rd);}.pt.lat2{background:var(--or);color:#fff;border-color:var(--or);}
+.anim-view{background:var(--sb);border-radius:13px;padding:20px;color:#fff;}
+.av-week{display:grid;grid-template-columns:repeat(7,1fr);gap:7px;margin-top:14px;}
+.av-day{background:rgba(255,255,255,.07);border-radius:9px;padding:10px 7px;text-align:center;}
+.av-day.today{background:var(--acc);}.av-day-n{font-size:.62rem;font-weight:700;opacity:.55;text-transform:uppercase;}.av-day-d{font-size:.75rem;font-weight:700;margin:2px 0;}
+.av-sl{background:rgba(255,255,255,.1);border-radius:4px;padding:2px 4px;font-size:.6rem;margin-top:3px;font-weight:600;}
+.av-sl.peri{background:rgba(26,95,212,.4);}.av-sl.mer{background:rgba(5,150,105,.4);}.av-sl.vac{background:rgba(8,145,178,.4);}.av-sl.rep{background:rgba(255,255,255,.05);opacity:.5;}.av-sl.cng{background:rgba(217,119,6,.4);}
+.pg{display:grid;gap:2px;}
+.pgh{background:var(--sb);color:rgba(255,255,255,.72);padding:6px 4px;text-align:center;font-size:.6rem;font-weight:700;border-radius:5px;}
+.pgn{background:var(--card);border:1px solid var(--bd);padding:5px 8px;border-radius:5px;font-weight:600;font-size:.68rem;display:flex;align-items:center;gap:5px;}
+.pgc{background:var(--card);border:1px solid var(--bd);border-radius:5px;min-height:44px;padding:3px;cursor:pointer;display:flex;flex-direction:column;gap:2px;}
+.pgc:hover{background:var(--accl);border-color:var(--acc);}
+.pgs{border-radius:3px;padding:2px 3px;font-size:.58rem;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.pgs.peri{background:var(--accl);color:var(--acc);}.pgs.mer{background:var(--grl);color:var(--gr);}.pgs.vac{background:var(--tel);color:var(--te);}.pgs.rep{background:var(--bg);color:var(--tx3);}.pgs.cng{background:var(--orl);color:var(--or);}
+.hsum{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:13px;}
+.hsi{background:var(--bg);border-radius:7px;padding:8px 10px;}.hsl{font-size:.59rem;color:var(--tx3);font-weight:700;text-transform:uppercase;}.hsv{font-size:.92rem;font-weight:800;margin-top:1px;}
+.enc{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:6px;font-size:.68rem;font-weight:700;}
+.eok{background:var(--grl);color:var(--gr);}.ewarn{background:var(--orl);color:var(--or);}
+.pbar{height:4px;background:var(--bg);border-radius:3px;overflow:hidden;}
+.pfill{height:100%;border-radius:3px;transition:width .3s;}.pbl{background:var(--acc);}.pgr2{background:var(--gr);}.por{background:var(--or);}
+.abox{display:flex;align-items:flex-start;gap:8px;padding:8px 10px;background:var(--bg);border-radius:7px;margin-bottom:5px;font-size:.74rem;}
+.abox.ard{background:var(--rdl);border-left:3px solid var(--rd);}.abox.aor{background:var(--orl);border-left:3px solid var(--or);}.abox.abl{background:var(--accl);border-left:3px solid var(--acc);}.abox.agr{background:var(--grl);border-left:3px solid var(--gr);}
+.np{position:fixed;right:14px;top:58px;width:305px;background:var(--card);border:1px solid var(--bd);border-radius:11px;box-shadow:var(--shl);z-index:400;display:none;max-height:70vh;overflow-y:auto;}
+.np.open{display:block;animation:mi .14s ease;}
+.nph{padding:10px 14px;border-bottom:1px solid var(--bd);font-weight:700;font-size:.8rem;display:flex;justify-content:space-between;align-items:center;}
+.ni2{padding:9px 14px;border-bottom:1px solid var(--bd);display:flex;gap:9px;cursor:pointer;}.ni2:hover{background:var(--bg);}.ni2.unr{background:#F0F7FF;}.ni2:last-child{border-bottom:none;}
+.ni2t{font-size:.74rem;color:var(--tx2);}.ni2t strong{color:var(--tx);display:block;font-size:.76rem;}.ni2tm{font-size:.62rem;color:var(--tx3);margin-top:1px;}
+.elay{display:grid;grid-template-columns:245px 1fr;height:calc(100vh - 118px);}
+.elist{border-right:1px solid var(--bd);overflow-y:auto;}
+.eitem{padding:10px 12px;border-bottom:1px solid var(--bd);cursor:pointer;}.eitem:hover{background:var(--bg);}.eitem.on{background:var(--accl);border-left:2px solid var(--acc);}.eitem.unr .esnd{font-weight:800;color:var(--tx);}
+.esnd{font-size:.75rem;color:var(--tx2);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.esbj{font-size:.69rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:1px;}
+.eprev{font-size:.64rem;color:var(--tx3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.etim{font-size:.6rem;color:var(--tx3);float:right;}
+.ebody{padding:18px;overflow-y:auto;}.eempty{display:flex;align-items:center;justify-content:center;height:100%;color:var(--tx3);font-size:.8rem;}
+.cf-card{background:linear-gradient(135deg,#0E1B2E,#1A3A6E);border-radius:12px;padding:20px;color:#fff;margin-bottom:11px;}
+.cf-btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
+.cf-btn{padding:8px 14px;background:rgba(255,255,255,.11);border:1px solid rgba(255,255,255,.18);border-radius:7px;color:#fff;font-family:'Sora',sans-serif;font-size:.75rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px;}
+.cf-btn:hover{background:rgba(255,255,255,.2);}
+.cc{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:14px;margin-bottom:9px;}
+.cc-top{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.cc-name{font-weight:700;font-size:.84rem;}.cc-role{font-size:.67rem;color:var(--tx3);}
+.cc-det{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:8px;}
+.cd{background:var(--bg);border-radius:6px;padding:6px 8px;}.cdl{font-size:.59rem;color:var(--tx3);font-weight:700;text-transform:uppercase;}.cdv{font-size:.77rem;font-weight:700;margin-top:1px;}
+.hvac{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:14px;margin-bottom:9px;}
+.bchart{display:flex;align-items:flex-end;gap:6px;height:65px;}
+.bitem{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;}.bbar{width:100%;border-radius:3px 3px 0 0;}.blbl,.bval{font-size:.58rem;color:var(--tx3);}
+#toast{position:fixed;bottom:16px;right:16px;z-index:600;background:var(--sb);color:#fff;padding:9px 14px;border-radius:8px;font-size:.77rem;font-weight:600;box-shadow:var(--shl);transform:translateY(55px);opacity:0;transition:all .22s cubic-bezier(.34,1.56,.64,1);pointer-events:none;max-width:290px;}
+#toast.show{transform:none;opacity:1;}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="lbox">
+    <div class="llogo">🌿</div>
+    <div class="ltitle">GestiLoisirs Pro v3</div>
+    <div class="lsub">Les Petits Explorateurs</div>
+    <div class="ltabs">
+      <div class="ltab on" onclick="switchL('admin',this)">Administration</div>
+      <div class="ltab" onclick="switchL('anim',this)">Animateur·rice</div>
+    </div>
+    <div id="la">
+      <div class="lform">
+        <input class="lin" type="email" placeholder="Email" value="admin@centre.fr">
+        <input class="lin" type="password" placeholder="Mot de passe" value="admin123">
+        <button class="lbtn" onclick="loginAdmin()">Accéder →</button>
+      </div>
+    </div>
+    <div id="lam" style="display:none;">
+      <div class="pusers" id="pusers"></div>
+      <div id="pinzone" style="display:none;">
+        <div class="pin-disp" id="pindisp"></div>
+        <div class="pin-grid" id="pingrid"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SIDEBAR -->
+<aside id="sb">
+  <div class="sbl"><div class="sbl-i"><div class="sbl-ic">🌿</div><div><div class="sbl-t">GestiLoisirs</div><div class="sbl-s">Pro v3</div></div></div></div>
+  <div class="ss">Principal</div>
+  <div class="ni on" onclick="go('dashboard',this)"><span class="ic">📊</span><span>Tableau de bord</span></div>
+  <div class="ni" onclick="go('enfants',this)"><span class="ic">👦</span><span>Enfants</span><span class="nb" id="nb-e">24</span></div>
+  <div class="ni" onclick="go('presences',this)"><span class="ic">✅</span><span>Présences</span></div>
+  <div class="ni" onclick="go('adhesions',this)"><span class="ic">💳</span><span>Adhésions</span><span class="nb" id="nb-adh">2</span></div>
+  <div class="ss">Gestion</div>
+  <div class="ni" onclick="go('activites',this)"><span class="ic">🎨</span><span>Activités</span></div>
+  <div class="ni" onclick="go('factures',this)"><span class="ic">🧾</span><span>Facturation</span><span class="nb" id="nb-f">3</span></div>
+  <div class="ni" onclick="go('mairie',this)"><span class="ic">🏛</span><span>Mairie & Subventions</span></div>
+  <div class="ss">Familles</div>
+  <div class="ni" onclick="go('documents',this)"><span class="ic">📄</span><span>Documents familles</span></div>
+  <div class="ss">Équipe</div>
+  <div class="ni" onclick="go('equipe',this)"><span class="ic">👥</span><span>Animateurs</span></div>
+  <div class="ni" onclick="go('planning',this)"><span class="ic">📅</span><span>Planning auto</span></div>
+  <div class="ni" onclick="go('vacances',this)"><span class="ic">🏖</span><span>Heures vacances</span></div>
+  <div class="ni" onclick="go('contrats',this)"><span class="ic">📋</span><span>Contrats & RH</span></div>
+  <div class="ss">Communication</div>
+  <div class="ni" onclick="go('emails',this)"><span class="ic">✉️</span><span>Messagerie</span><span class="nb" id="nb-m">5</span></div>
+  <div class="ss">Config</div>
+  <div class="ni" onclick="go('parametres',this)"><span class="ic">⚙️</span><span>Paramètres</span></div>
+  <div class="sbf"><div class="sbup"><div class="av abl" id="sb-av">AD</div><div><div style="font-size:.74rem;font-weight:700;color:rgba(255,255,255,.78);" id="sb-name">Directeur·rice</div><div style="font-size:.6rem;color:rgba(255,255,255,.28);" id="sb-role">Administration</div></div><button class="btn bg2 bsm" style="margin-left:auto;font-size:.58rem;" onclick="logout()">⏏</button></div></div>
+</aside>
+
+<!-- MAIN -->
+<main id="main">
+<div class="topbar">
+  <div class="tbt" id="tbt">Tableau de bord</div>
+  <div class="tbr">
+    <div class="icb" onclick="toggleNP()" id="nbtn">🔔<div class="ndot" id="ndot"></div></div>
+    <button class="btn bg2 bsm" id="btn-ae" onclick="openM('m-enfant')">+ Enfant</button>
+    <button class="btn bp bsm" id="btn-af" onclick="openM('m-facture')">+ Facture</button>
+  </div>
+</div>
+<div class="np" id="np"><div class="nph">Notifications<button class="btn bg2 bsm" onclick="clearN()">Tout lire</button></div><div id="nl"></div></div>
+<div id="content">
+
+<!-- DASHBOARD -->
+<div class="view active" id="v-dashboard">
+  <div class="ph"><div><h1>Tableau de bord</h1><p id="dd"></p></div></div>
+  <div class="krow k5 mb14">
+    <div class="kpi"><div class="kt"><span>👦</span><span class="ktr tu">+3</span></div><div class="kv" id="kv-e">24</div><div class="kl">Enfants inscrits</div></div>
+    <div class="kpi"><div class="kt"><span>✅</span><span class="ktr tu">75%</span></div><div class="kv">18</div><div class="kl">Présents aujourd'hui</div></div>
+    <div class="kpi"><div class="kt"><span>💳</span><span class="ktr td">2 att.</span></div><div class="kv">22/24</div><div class="kl">Adhésions à jour</div></div>
+    <div class="kpi"><div class="kt"><span>🧾</span><span class="ktr td">3 att.</span></div><div class="kv">2 840€</div><div class="kl">Recettes du mois</div></div>
+    <div class="kpi"><div class="kt"><span>👥</span><span class="ktr tu">Actif</span></div><div class="kv" id="kv-q">8</div><div class="kl">Animateurs actifs</div></div>
+  </div>
+  <div class="g2 mb14">
+    <div class="card"><div class="ch"><div class="ct">Présences cette semaine</div></div><div class="cb"><div class="bchart" id="dc"></div></div></div>
+    <div class="card"><div class="ch"><div class="ct">⚠ Alertes</div></div><div class="cb" id="da"></div></div>
+  </div>
+  <div class="g2">
+    <div class="card"><div class="ch"><div class="ct">Dernières inscriptions</div><button class="btn bg2 bsm" onclick="go('enfants',null)">Voir →</button></div><table><thead><tr><th>Enfant</th><th>Groupe</th><th>Adhésion</th><th>Statut</th></tr></thead><tbody id="di"></tbody></table></div>
+    <div class="card"><div class="ch"><div class="ct">Planning animateurs</div><button class="btn bg2 bsm" onclick="go('planning',null)">Voir →</button></div><table><thead><tr><th>Animateur</th><th>Statut</th><th>Congés rest.</th></tr></thead><tbody id="dp"></tbody></table></div>
+  </div>
+</div>
+
+<!-- ENFANTS -->
+<div class="view" id="v-enfants">
+  <div class="ph"><div><h1>Gestion des enfants</h1><p id="ec"></p></div><div class="ha"><button class="btn bp" onclick="openM('m-enfant')">+ Inscrire</button></div></div>
+  <div class="tabs">
+    <div class="tab on" onclick="tabE('tous',this)">Tous</div>
+    <div class="tab" onclick="tabE('petits',this)">Petits 3–5</div>
+    <div class="tab" onclick="tabE('moyens',this)">Moyens 6–8</div>
+    <div class="tab" onclick="tabE('grands',this)">Grands 9–12</div>
+    <div class="tab" onclick="tabE('pai',this)">⚠ PAI</div>
+    <div class="tab" onclick="tabE('attente',this)">En attente</div>
+    <div class="tab" onclick="tabE('incomplet',this)">⛔ Incomplet</div>
+  </div>
+  <div class="tbar">
+    <div class="sbox"><span>🔍</span><input placeholder="Nom, parent..." oninput="filterE(this.value)"></div>
+    <select class="fsel" onchange="filterEPer(this.value)"><option value="">Toutes périodes</option><option>Périscolaire</option><option>Mercredi</option><option>Vacances</option></select>
+    <select class="fsel" onchange="filterEQF(this.value)"><option value="">Tous QF</option><option>Tranche A</option><option>Tranche B</option><option>Tranche C</option></select>
+  </div>
+  <div class="card"><div style="overflow-x:auto;"><table><thead><tr><th></th><th>Enfant</th><th>Âge/Groupe</th><th>Responsable</th><th>Tél</th><th>QF/Tarif</th><th>Fratrie</th><th>PAI</th><th>Adhésion</th><th>Dossier</th><th>Statut</th><th></th></tr></thead><tbody id="te"></tbody></table></div></div>
+</div>
+
+<!-- PRESENCES -->
+<div class="view" id="v-presences">
+  <div class="ph"><div><h1>Présences — Arrivées &amp; Départs</h1><p>Multi-appareils : tablette, ordi, smartphone</p></div><div class="ha">
+    <input type="date" class="fsel" id="pd" onchange="loadP()">
+    <select class="fsel" id="pg2" onchange="loadP()"><option value="">Tous groupes</option><option>Petits (3-5 ans)</option><option>Moyens (6-8 ans)</option><option>Grands (9-12 ans)</option></select>
+    <button class="btn bgr" onclick="saveP()">💾 Sauvegarder</button>
+  </div></div>
+  <div class="krow k4 mb14" id="ps"></div>
+  <div class="card mb14"><div class="ch"><div class="ct" id="pt2">Présences</div><div class="cs" id="pc"></div></div><div class="cb" id="pl"></div></div>
+  <div class="card"><div class="ch"><div class="ct">📍 Journal arrivées / départs</div></div><div class="cb"><div id="pjournal" style="max-height:180px;overflow-y:auto;"></div></div></div>
+</div>
+
+<!-- ADHESIONS -->
+<div class="view" id="v-adhesions">
+  <div class="ph"><div><h1>Adhésions — 28€/mois</h1><p>Paiement obligatoire avant présence · Tarif dégressif fratrie (tranche −1)</p></div><div class="ha"><button class="btn bp" onclick="openM('m-adhesion')">+ Paiement</button></div></div>
+  <div class="krow k4 mb14">
+    <div class="kpi"><div class="kv" id="adh-ok-v" style="color:var(--gr);">22</div><div class="kl">Adhésions payées</div></div>
+    <div class="kpi"><div class="kv" id="adh-ko-v" style="color:var(--rd);">2</div><div class="kl">Accès bloqué</div></div>
+    <div class="kpi"><div class="kv">3</div><div class="kl">Fratries (tarif réduit)</div></div>
+    <div class="kpi"><div class="kv">616€</div><div class="kl">Recettes adhésions</div></div>
+  </div>
+  <div class="card mb14"><div class="cb">
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
+      <div style="background:var(--accl);border-radius:8px;padding:10px;"><div style="font-weight:700;color:var(--acc);margin-bottom:3px;font-size:.78rem;">1er enfant</div><div style="font-size:.95rem;font-weight:800;">28€/mois</div></div>
+      <div style="background:var(--grl);border-radius:8px;padding:10px;"><div style="font-weight:700;color:var(--gr);margin-bottom:3px;font-size:.78rem;">2ème enfant (fratrie)</div><div style="font-size:.95rem;font-weight:800;">Tranche −1 auto</div><div style="font-size:.7rem;color:var(--tx3);">Ex: Tranche B → Tranche A</div></div>
+      <div style="background:var(--rdl);border-radius:8px;padding:10px;"><div style="font-weight:700;color:var(--rd);margin-bottom:3px;font-size:.78rem;">⚠ Non payé</div><div style="font-size:.95rem;font-weight:800;">Accès bloqué</div></div>
+    </div>
+  </div></div>
+  <div class="card"><div style="overflow-x:auto;"><table><thead><tr><th>Famille</th><th>Enfant</th><th>Fratrie</th><th>QF appliqué</th><th>Montant</th><th>Paiement</th><th>Statut</th><th>Accès</th><th></th></tr></thead><tbody id="tadh"></tbody></table></div></div>
+</div>
+
+<!-- ACTIVITES -->
+<div class="view" id="v-activites">
+  <div class="ph"><div><h1>Activités &amp; Ateliers</h1></div><div class="ha"><button class="btn bp" onclick="openM('m-activite')">+ Activité</button></div></div>
+  <div class="g3" id="ag"></div>
+</div>
+
+<!-- FACTURES -->
+<div class="view" id="v-factures">
+  <div class="ph"><div><h1>Facturation familles</h1></div><div class="ha"><button class="btn bg2 bsm" onclick="toast('⬇ Export CSV')">⬇ CSV</button><button class="btn bp" onclick="openM('m-facture')">+ Facture</button></div></div>
+  <div class="krow k4 mb14">
+    <div class="kpi"><div class="kv" style="color:var(--gr);">1 840€</div><div class="kl">Encaissé</div></div>
+    <div class="kpi"><div class="kv" style="color:var(--or);">720€</div><div class="kl">En attente</div></div>
+    <div class="kpi"><div class="kv" style="color:var(--rd);">280€</div><div class="kl">En retard</div></div>
+    <div class="kpi"><div class="kv">12</div><div class="kl">Total factures</div></div>
+  </div>
+  <div class="tbar mb14"><div class="sbox"><span>🔍</span><input placeholder="Rechercher..."></div>
+    <select class="fsel" onchange="renderFac(this.value)"><option value="">Tous statuts</option><option>Payée</option><option>En attente</option><option>En retard</option></select>
+  </div>
+  <div class="card"><div style="overflow-x:auto;"><table><thead><tr><th>N°</th><th>Famille</th><th>Période</th><th>Brut</th><th>CAF</th><th>Adhésion</th><th>Net</th><th>Att. fiscale</th><th>Statut</th><th></th></tr></thead><tbody id="tf"></tbody></table></div></div>
+</div>
+
+<!-- MAIRIE -->
+<div class="view" id="v-mairie">
+  <div class="ph"><div><h1>Mairie &amp; Subventions</h1></div><div class="ha"><button class="btn bpu" onclick="openM('m-subvention')">+ Subvention</button><button class="btn bp" onclick="openM('m-facmairie')">+ Facture mairie</button></div></div>
+  <div class="tabs"><div class="tab on" onclick="tabMairie('factures',this)">Factures mairie</div><div class="tab" onclick="tabMairie('conventions',this)">Conventions</div><div class="tab" onclick="tabMairie('subventions',this)">Subventions</div><div class="tab" onclick="tabMairie('bordereau',this)">Bordereau CAF</div></div>
+  <div id="mairie-content"></div>
+</div>
+
+<!-- DOCUMENTS -->
+<div class="view" id="v-documents">
+  <div class="ph"><div><h1>Documents familles</h1><p>Dossier complet obligatoire avant accueil</p></div></div>
+  <div class="tabs"><div class="tab on" onclick="tabDoc('dossier',this)">Dossier inscription</div><div class="tab" onclick="tabDoc('attestation',this)">Attestations présence</div><div class="tab" onclick="tabDoc('fiscal',this)">Attestations fiscales</div><div class="tab" onclick="tabDoc('reglement',this)">Règlement intérieur</div><div class="tab" onclick="tabDoc('pai',this)">PAI / Fiche sanitaire</div></div>
+  <div id="doc-content"></div>
+</div>
+
+<!-- EQUIPE -->
+<div class="view" id="v-equipe">
+  <div class="ph"><div><h1>Équipe d'animation</h1></div><div class="ha"><button class="btn bp" onclick="openM('m-anim')">+ Animateur</button></div></div>
+  <div class="card"><div style="overflow-x:auto;"><table><thead><tr><th></th><th>Nom</th><th>Poste</th><th>Diplôme</th><th>Contrat</th><th>H/sem</th><th>H effectuées</th><th>Salaire brut</th><th>Congés rest.</th><th>Statut</th><th></th></tr></thead><tbody id="teq"></tbody></table></div></div>
+</div>
+
+<!-- PLANNING -->
+<div class="view" id="v-planning">
+  <div class="ph"><div><h1>Planning automatique</h1><p id="psem"></p></div><div class="ha">
+    <button class="btn bg2 bsm" onclick="semP()">← Préc.</button>
+    <button class="btn bg2 bsm" onclick="semA()">Auj.</button>
+    <button class="btn bg2 bsm" onclick="semS()">Suiv. →</button>
+    <button class="btn bgr" onclick="openM('m-semtype')">⚡ Générer auto</button>
+    <button class="btn bp" onclick="openM('m-creneau')">+ Créneau</button>
+  </div></div>
+  <div class="hsum" id="plansum"></div>
+  <div id="enc-alert" class="mb14"></div>
+  <div class="card"><div class="cb" style="overflow-x:auto;"><div class="pg" id="pgrid" style="grid-template-columns:125px repeat(7,1fr);"></div></div></div>
+</div>
+
+<!-- HEURES VACANCES -->
+<div class="view" id="v-vacances">
+  <div class="ph"><div><h1>Heures disponibles — Vacances</h1><p>Calcul automatique + alerte congés restants</p></div><div class="ha">
+    <select class="fsel" id="vac-p" onchange="renderVac()"><option>Vacances Toussaint (10j)</option><option>Vacances Noël (10j)</option><option>Vacances Hiver (10j)</option><option>Vacances Printemps (10j)</option><option>Vacances Été (40j)</option></select>
+    <button class="btn bgr" onclick="genPlanVac()">⚡ Générer planning vacances</button>
+  </div></div>
+  <div class="card mb14"><div class="cb"><div style="background:var(--accl);border-radius:8px;padding:10px 13px;font-size:.74rem;color:var(--acc);">⚡ <strong>Calcul auto :</strong> H disponibles = (H/jour × jours vacances) − congés posés. Alerte si solde insuffisant.</div></div></div>
+  <div id="vac-content"></div>
+</div>
+
+<!-- CONTRATS -->
+<div class="view" id="v-contrats">
+  <div class="ph"><div><h1>Contrats &amp; RH</h1></div><div class="ha"><button class="btn bg2 bsm" onclick="openM('m-anim')">+ Animateur</button><button class="btn bp" onclick="openM('m-contrat')">+ Contrat</button></div></div>
+  <div class="tabs"><div class="tab on" onclick="tabC('contrats',this)">Contrats</div><div class="tab" onclick="tabC('heures',this)">Heures</div><div class="tab" onclick="tabC('conges',this)">Congés</div><div class="tab" onclick="tabC('docs',this)">Documents RH</div><div class="tab" onclick="tabC('coffre',this)">🔐 Coffre-fort</div></div>
+  <div id="cc"></div>
+</div>
+
+<!-- VUE ANIMATEUR -->
+<div class="view" id="v-anim-view">
+  <div class="ph"><div><h1>Mon espace</h1><p id="av-sub">Planning &amp; activités — lecture seule</p></div><div class="ha"><button class="btn bp" onclick="go('anim-presences',null)">✅ Pointer les présences</button></div></div>
+  <div class="g2 mb14">
+    <div class="anim-view">
+      <div style="font-size:.78rem;font-weight:700;opacity:.6;margin-bottom:3px;">MON PLANNING — Semaine en cours</div>
+      <div style="font-size:1rem;font-weight:800;" id="av-nom">Marie Dupont</div>
+      <div class="av-week" id="av-week"></div>
+    </div>
+    <div class="card"><div class="ch"><div class="ct">Mes activités</div></div><div class="cb" id="av-acts"></div></div>
+  </div>
+  <div class="g2">
+    <div class="card"><div class="ch"><div class="ct">Mes heures ce mois</div></div><div class="cb" id="av-hours"></div></div>
+    <div class="card"><div class="ch"><div class="ct">🔐 Mes documents</div></div><div class="cb" id="av-docs"></div></div>
+  </div>
+</div>
+
+<!-- PRESENCES ANIMATEUR -->
+<div class="view" id="v-anim-presences">
+  <div class="ph"><div><h1>Pointer les présences</h1><p>Vue tablette / smartphone</p></div><div class="ha">
+    <input type="date" class="fsel" id="apd" onchange="loadAnimP()">
+    <select class="fsel" id="apm"><option>Matin (arrivée)</option><option>Soir (départ)</option></select>
+    <button class="btn bgr" onclick="saveP()">💾 Valider</button>
+  </div></div>
+  <div class="krow k4 mb14" id="aps"></div>
+  <div id="apl" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:8px;"></div>
+</div>
+
+<!-- EMAILS -->
+<div class="view" id="v-emails">
+  <div class="ph"><div><h1>Messagerie</h1><p>Emails filtrés automatiquement depuis la boîte de l'association</p></div><div class="ha">
+    <select class="fsel" onchange="filterEM(this.value)"><option value="">Tous</option><option value="inscription">📝 Inscriptions</option><option value="paiement">💶 Paiements</option><option value="urgence">🚨 Urgences</option><option value="info">ℹ Infos</option><option value="admin">⚙ Admin</option></select>
+    <button class="btn bp bsm" onclick="simEmail()">📨 Simuler mail</button>
+  </div></div>
+  <div class="card" style="overflow:hidden;"><div class="elay"><div class="elist" id="el"></div><div class="ebody" id="eb"><div class="eempty">Sélectionnez un email</div></div></div></div>
+</div>
+
+<!-- PARAMETRES -->
+<div class="view" id="v-parametres">
+  <div class="ph"><div><h1>Paramètres</h1></div></div>
+  <div class="g2">
+    <div class="card"><div class="ch"><div class="ct">🏢 Centre</div></div><div class="cb">
+      <div class="fg"><label>Nom</label><input value="Les Petits Explorateurs"></div>
+      <div class="fg"><label>Adresse</label><input value="12 Rue des Tilleuls, 75000 Ville"></div>
+      <div class="fr"><div class="fg"><label>Tél</label><input value="01 23 45 67 89"></div><div class="fg"><label>Email</label><input value="contact@petits-explorateurs.fr"></div></div>
+      <div class="fr"><div class="fg"><label>SIRET</label><input placeholder="XXX XXX XXX XXXXX"></div><div class="fg"><label>Agrément J&amp;S</label><input placeholder="XX-D-XXX-XX-XXXXX"></div></div>
+      <button class="btn bp" onclick="toast('✅ Sauvegardé')">Sauvegarder</button>
+    </div></div>
+    <div class="card"><div class="ch"><div class="ct">💶 Tarifs &amp; Adhésion</div></div><div class="cb">
+      <div class="fr"><div class="fg"><label>Tranche A €/j</label><input type="number" value="2.50"></div><div class="fg"><label>Tranche B €/j</label><input type="number" value="4.50"></div></div>
+      <div class="fr"><div class="fg"><label>Tranche C €/j</label><input type="number" value="7.00"></div><div class="fg"><label>CAF %</label><input type="number" value="30"></div></div>
+      <div class="fr"><div class="fg"><label>Adhésion mensuelle €</label><input type="number" value="28"></div><div class="fg"><label>Fratrie</label><select><option>Tranche −1 automatique</option></select></div></div>
+      <button class="btn bp" onclick="toast('✅ Tarifs mis à jour')">Sauvegarder</button>
+    </div></div>
+    <div class="card"><div class="ch"><div class="ct">📏 Encadrement légal</div></div><div class="cb">
+      <div class="fr"><div class="fg"><label>Périscolaire (1/X)</label><input type="number" value="10"></div><div class="fg"><label>Mercredi (1/X)</label><input type="number" value="14"></div></div>
+      <div class="fr"><div class="fg"><label>Vacances (1/X)</label><input type="number" value="12"></div><div class="fg"><label>Moins 6 ans (1/X)</label><input type="number" value="8"></div></div>
+      <button class="btn bp" onclick="toast('✅ Ratios mis à jour')">Sauvegarder</button>
+    </div></div>
+    <div class="card"><div class="ch"><div class="ct">🔗 Connexions site &amp; email</div></div><div class="cb">
+      <div class="fg"><label>URL site</label><input value="https://petits-explorateurs.fr"></div>
+      <div class="fg"><label>Clé synchro</label><input value="GL-2026-K8X4P2MN" style="font-family:'JetBrains Mono';color:var(--acc);" readonly></div>
+      <div style="display:flex;align-items:center;gap:7px;margin:5px 0 10px;"><div style="width:6px;height:6px;border-radius:50%;background:var(--gr);"></div><span style="font-size:.7rem;color:var(--gr);font-weight:700;">Synchronisation active</span></div>
+      <div class="fg"><label>Email IMAP</label><input value="contact@petits-explorateurs.fr"></div>
+      <button class="btn bp" onclick="toast('✅ Config sauvegardée')">Sauvegarder</button>
+    </div></div>
+    <div class="card"><div class="ch"><div class="ct">🔐 Codes PIN animateurs</div></div><div class="cb" id="pins-list"></div></div>
+  </div>
+</div>
+
+</div></main>
+
+<!-- MODALS -->
+<div class="mbg" id="m-enfant"><div class="modal">
+  <div class="mh"><h2>👦 Inscrire un enfant</h2><button class="mcl" onclick="closeM('m-enfant')">✕</button></div>
+  <div class="mb2">
+    <div class="fsep">Enfant</div>
+    <div class="fr"><div class="fg"><label>Prénom *</label><input id="ep"></div><div class="fg"><label>Nom *</label><input id="en"></div></div>
+    <div class="fr"><div class="fg"><label>Date naissance *</label><input type="date" id="edn"></div><div class="fg"><label>Groupe</label><select id="eg"><option>Petits (3-5 ans)</option><option>Moyens (6-8 ans)</option><option>Grands (9-12 ans)</option></select></div></div>
+    <div class="fg"><label>Allergies / PAI *</label><input id="epai" placeholder="Aucune, ou préciser…"></div>
+    <div class="fg"><label>Médecin traitant *</label><input id="emed" placeholder="Dr. Nom — 01 XX XX XX XX"></div>
+    <div class="fr"><div class="fg"><label>N° Sécurité sociale *</label><input id="ess"></div><div class="fg"><label>Groupe sanguin</label><input id="esg" placeholder="A+, O-..."></div></div>
+    <div class="fsep">Responsable légal *</div>
+    <div class="fr"><div class="fg"><label>Nom complet *</label><input id="epar"></div><div class="fg"><label>Téléphone *</label><input type="tel" id="etel"></div></div>
+    <div class="fr"><div class="fg"><label>Email *</label><input type="email" id="eemail"></div><div class="fg"><label>Lien</label><select id="elien"><option>Père</option><option>Mère</option><option>Tuteur·rice</option></select></div></div>
+    <div class="fsep">Contacts d'urgence *</div>
+    <div class="fr"><div class="fg"><label>Contact 1 *</label><input id="eu1" placeholder="Nom — Tél"></div><div class="fg"><label>Contact 2</label><input id="eu2"></div></div>
+    <div class="fsep">Modalités</div>
+    <div class="fr"><div class="fg"><label>QF *</label><select id="eqf"><option>Tranche A (QF&lt;500)</option><option>Tranche B (QF 500–900)</option><option>Tranche C (QF&gt;900)</option></select></div><div class="fg"><label>Fratrie</label><select id="efratrie"><option value="0">1er enfant</option><option value="1">2ème enfant</option><option value="2">3ème+</option></select></div></div>
+    <div class="fr"><div class="fg"><label>Période</label><select id="eper"><option>Périscolaire + Mercredi</option><option>Périscolaire uniquement</option><option>Mercredi</option><option>Vacances scolaires</option><option>Toutes périodes</option></select></div><div class="fg"><label>Assurance RC *</label><select id="eassu"><option>Fournie</option><option>Non fournie</option></select></div></div>
+    <div class="fr"><div class="fg"><label>Sortie seul</label><select id="esortie"><option>Non</option><option>Oui</option></select></div><div class="fg"><label>Autorisation photos</label><select id="ephoto"><option>Oui</option><option>Non</option></select></div></div>
+    <div class="fg"><label>Personnes autorisées *</label><input id="eauto" placeholder="Prénom Nom, Prénom Nom…"></div>
+    <div id="dossier-check"></div>
+  </div>
+  <div class="mf"><button class="btn bg2" onclick="closeM('m-enfant')">Annuler</button><button class="btn bg2 bsm" onclick="checkDossier()">🔍 Vérifier</button><button class="btn bp" onclick="addE()">✓ Inscrire</button></div>
+</div></div>
+
+<div class="mbg" id="m-adhesion"><div class="modal" style="width:420px;">
+  <div class="mh"><h2>💳 Paiement adhésion</h2><button class="mcl" onclick="closeM('m-adhesion')">✕</button></div>
+  <div class="mb2">
+    <div class="fg"><label>Famille</label><select id="adh-fam"></select></div>
+    <div class="fr"><div class="fg"><label>Mois</label><select><option>Mai 2026</option><option>Juin 2026</option></select></div><div class="fg"><label>Montant (€)</label><input type="number" value="28"></div></div>
+    <div class="fg"><label>Mode de paiement</label><select><option>Chèque</option><option>Virement</option><option>Espèces</option><option>CB</option></select></div>
+  </div>
+  <div class="mf"><button class="btn bg2" onclick="closeM('m-adhesion')">Annuler</button><button class="btn bgr" onclick="addAdhesion()">✓ Valider</button></div>
+</div></div>
+
+<div class="mbg" id="m-facture"><div class="modal">
+  <div class="mh"><h2>🧾 Créer une facture</h2><button class="mcl" onclick="closeM('m-facture')">✕</button></div>
+  <div class="mb2">
+    <div class="fr"><div class="fg"><label>Famille</label><select id="ff"></select></div><div class="fg"><label>Période</label><select id="fper"><option>Mai 2026 — Périscolaire</option><option>Mercredi Mai 2026</option><option>Vacances Toussaint</option></select></div></div>
+    <div class="fsep">Prestations</div>
+    <table style="width:100%;font-size:.74rem;margin-bottom:9px;"><thead style="background:var(--bg);"><tr><th style="padding:5px 8px;text-align:left;">Prestation</th><th>Qté</th><th>P.U.</th><th>Total</th></tr></thead>
+    <tbody>
+      <tr><td style="padding:4px 8px;">Accueil matin</td><td><input type="number" value="18" style="width:48px;padding:3px 5px;background:var(--bg);border:1px solid var(--bd);border-radius:4px;font-family:Sora;" oninput="calcF()"></td><td style="padding:4px 8px;">2,50€</td><td style="padding:4px 8px;font-weight:700;" id="r1">45,00€</td></tr>
+      <tr><td style="padding:4px 8px;">Accueil soir</td><td><input type="number" value="18" style="width:48px;padding:3px 5px;background:var(--bg);border:1px solid var(--bd);border-radius:4px;font-family:Sora;" oninput="calcF()"></td><td style="padding:4px 8px;">2,50€</td><td style="padding:4px 8px;font-weight:700;" id="r2">45,00€</td></tr>
+      <tr><td style="padding:4px 8px;">Repas</td><td><input type="number" value="14" style="width:48px;padding:3px 5px;background:var(--bg);border:1px solid var(--bd);border-radius:4px;font-family:Sora;" oninput="calcF()"></td><td style="padding:4px 8px;">3,50€</td><td style="padding:4px 8px;font-weight:700;" id="r3">49,00€</td></tr>
+      <tr><td style="padding:4px 8px;">Goûter</td><td><input type="number" value="18" style="width:48px;padding:3px 5px;background:var(--bg);border:1px solid var(--bd);border-radius:4px;font-family:Sora;" oninput="calcF()"></td><td style="padding:4px 8px;">1,20€</td><td style="padding:4px 8px;font-weight:700;" id="r4">21,60€</td></tr>
+      <tr><td style="padding:4px 8px;">Adhésion mensuelle</td><td style="padding:4px 8px;">1</td><td style="padding:4px 8px;">28,00€</td><td style="padding:4px 8px;font-weight:700;" id="r5">28,00€</td></tr>
+    </tbody></table>
+    <div style="text-align:right;background:var(--bg);border-radius:7px;padding:9px 12px;font-size:.79rem;">
+      Sous-total : <strong id="fsub">188,60€</strong><br>
+      Déduction CAF (30%) : <strong style="color:var(--gr);" id="fcaf">−48,18€</strong><br>
+      <span style="font-size:.88rem;font-weight:800;">Total net : <span id="fnet">140,42€</span></span>
+    </div>
+  </div>
+  <div class="mf"><button class="btn bg2" onclick="closeM('m-facture')">Annuler</button><button class="btn bgr" onclick="addFac()">✓ Générer + att. fiscale</button></div>
+</div></div>
+
+<div class="mbg" id="m-anim"><div class="modal">
+  <div class="mh"><h2>👥 Ajouter un animateur</h2><button class="mcl" onclick="closeM('m-anim')">✕</button></div>
+  <div class="mb2">
+    <div class="fsep">Identité</div>
+    <div class="fr"><div class="fg"><label>Prénom</label><input id="ap"></div><div class="fg"><label>Nom</label><input id="an"></div></div>
+    <div class="fr"><div class="fg"><label>Poste</label><select id="apo"><option>Animateur·rice</option><option>Animateur·rice principal·e</option><option>Directeur·rice adjoint·e</option><option>Intervenant·e</option></select></div><div class="fg"><label>Diplôme</label><select id="adip"><option>BAFA</option><option>BAFD</option><option>BPJEPS LTP</option><option>CAP AEPE</option><option>Stagiaire BAFA</option><option>Autre</option></select></div></div>
+    <div class="fr"><div class="fg"><label>Email</label><input type="email" id="ae"></div><div class="fg"><label>Tél</label><input type="tel" id="at"></div></div>
+    <div class="fsep">Contrat</div>
+    <div class="fr"><div class="fg"><label>Type</label><select id="act"><option>CDI</option><option>CDD</option><option>CEE</option><option>Bénévole</option><option>Stagiaire</option></select></div><div class="fg"><label>H/semaine</label><input type="number" id="ah" value="35"></div></div>
+    <div class="fr"><div class="fg"><label>Taux horaire brut €</label><input type="number" id="ath" value="11.88"></div><div class="fg"><label>Congés annuels (j)</label><input type="number" id="acong" value="25"></div></div>
+    <div class="fr"><div class="fg"><label>Début</label><input type="date" id="adeb"></div><div class="fg"><label>Fin (CDD/CEE)</label><input type="date" id="afin"></div></div>
+    <div class="fg"><label>Code PIN (4 chiffres)</label><input type="password" id="apin" maxlength="4" placeholder="Ex: 1234"></div>
+    <div class="fsep">Semaine type périscolaire</div>
+    <div class="fr"><div class="fg"><label>Périscolaire matin</label><select id="asm"><option>Oui</option><option>Non</option></select></div><div class="fg"><label>Périscolaire soir</label><select id="ass"><option>Oui</option><option>Non</option></select></div></div>
+    <div class="fr"><div class="fg"><label>Mercredi</label><select id="amer"><option>Oui</option><option>Non</option></select></div><div class="fg"><label>Vacances</label><select id="avac"><option>Oui</option><option>Non</option></select></div></div>
+    <div class="fg"><label>Lien coffre-fort bulletins de paie</label><input id="acoffre" placeholder="https://app.payfit.com/..."></div>
+  </div>
+  <div class="mf"><button class="btn bg2" onclick="closeM('m-anim')">Annuler</button><button class="btn bp" onclick="addAnim()">✓ Ajouter</button></div>
+</div></div>
+
+<div class="mbg" id="m-semtype"><div class="modal" style="width:460px;">
+  <div class="mh"><h2>⚡ Générer le planning</h2><button class="mcl" onclick="closeM('m-semtype')">✕</button></div>
+  <div class="mb2">
+    <div class="fr"><div class="fg"><label>Période</label><select id="stper"><option>Semaine courante</option><option>Semaine suivante</option><option>2 semaines</option><option>Vacances scolaires</option></select></div><div class="fg"><label>Type</label><select id="sttype"><option>Périscolaire standard</option><option>Avec mercredi</option><option>Semaine vacances</option></select></div></div>
+    <div id="enc-preview" style="margin-top:8px;"></div>
+    <div style="background:var(--accl);border-radius:7px;padding:9px 12px;font-size:.73rem;color:var(--acc);margin-top:9px;">⚡ <strong>Génération intelligente :</strong> Semaines types · Ratios légaux vérifiés · Congés pris en compte · Alerte solde congés insuffisant</div>
+  </div>
+  <div class="mf"><button class="btn bg2" onclick="closeM('m-semtype')">Annuler</button><button class="btn bgr" onclick="genPlanning()">⚡ Générer</button></div>
+</div></div>
+
+<div class="mbg" id="m-creneau"><div class="modal" style="width:400px;">
+  <div class="mh"><h2>📅 Ajouter un créneau</h2><button class="mcl" onclick="closeM('m-creneau')">✕</button></div>
+  <div class="mb2">
+    <div class="fr"><div class="fg"><label>Animateur</label><select id="cra"></select></div><div class="fg"><label>Jour</label><select id="crj"><option>Lundi</option><option>Mardi</option><option>Mercredi</option><option>Jeudi</option><option>Vendredi</option></select></div></div>
+    <div class="fr"><div class="fg"><label>Début</label><input type="time" id="crd" value="07:30"></div><div class="fg"><label>Fin</label><input type="time" id="crf" value="19:00"></div></div>
+    <div class="fg"><label>Type</label><select id="crt"><option>Périscolaire matin</option><option>Périscolaire soir</option><option>Mercredi</option><option>Vacances</option><option>Congé</option><option>Repos</option></select></div>
+  </div>
+  <div class="mf"><button class="btn bg2" onclick="closeM('m-creneau')">Annuler</button><button class="btn bp" onclick="addCreneau()">✓ Ajouter</button></div>
+</div></div>
+
+<div class="mbg" id="m-contrat"><div class="modal" style="width:420px;">
+  <div class="mh"><h2>📋 Nouveau contrat</h2><button class="mcl" onclick="closeM('m-contrat')">✕</button></div>
+  <div class="mb2">
+    <div class="fg"><label>Animateur</label><select id="cta"></select></div>
+    <div class="fr"><div class="fg"><label>Type</label><select id="ctt"><option>CDI</option><option>CDD</option><option>CEE</option><option>Avenant</option></select></div><div class="fg"><label>H/semaine</label><input type="number" id="cth" value="35"></div></div>
+    <div class="fr"><div class="fg"><label>Début</label><input type="date" id="ctd"></div><div class="fg"><label>Fin</label><input type="date" id="ctf"></div></div>
+    <div class="fr"><div class="fg"><label>Taux brut €/h</label><input type="number" id="cttx" value="11.88"></div><div class="fg"><label>Essai (mois)</label><input type="number" value="2"></div></div>
+  </div>
+  <div class="mf"><button class="btn bg2" onclick="closeM('m-contrat')">Annuler</button><button class="btn bpu" onclick="addContrat()">✓ Créer</button></div>
+</div></div>
+
+<div class="mbg" id="m-activite"><div class="modal" style="width:420px;">
+  <div class="mh"><h2>🎨 Nouvelle activité</h2><button class="mcl" onclick="closeM('m-activite')">✕</button></div>
+  <div class="mb2">
+    <div class="fg"><label>Nom</label><input id="acn"></div>
+    <div class="fr"><div class="fg"><label>Animateur</label><select id="acr"></select></div><div class="fg"><label>Groupe</label><select id="acg"><option>Tous</option><option>Petits (3-5 ans)</option><option>Moyens (6-8 ans)</option><option>Grands (9-12 ans)</option></select></div></div>
+    <div class="fr"><div class="fg"><label>Capacité</label><input type="number" id="acm" value="12"></div><div class="fg"><label>Horaire</label><input id="ach"></div></div>
+    <div class="fg"><label>Description</label><textarea rows="2" id="acd"></textarea></div>
+  </div>
+  <div class="mf"><button class="btn bg2" onclick="closeM('m-activite')">Annuler</button><button class="btn bp" onclick="addAct()">✓ Créer</button></div>
+</div></div>
+
+<div class="mbg" id="m-facmairie"><div class="modal" style="width:400px;"><div class="mh"><h2>🏛 Facture mairie</h2><button class="mcl" onclick="closeM('m-facmairie')">✕</button></div><div class="mb2"><div class="fg"><label>Destinataire</label><input value="Mairie de Ville — Service Jeunesse"></div><div class="fr"><div class="fg"><label>Période</label><select><option>Mai 2026</option><option>T2 2026</option></select></div><div class="fg"><label>Montant €</label><input type="number" value="1560"></div></div></div><div class="mf"><button class="btn bg2" onclick="closeM('m-facmairie')">Annuler</button><button class="btn bp" onclick="genFacMairie()">✓ Générer</button></div></div></div>
+
+<div class="mbg" id="m-subvention"><div class="modal" style="width:400px;"><div class="mh"><h2>📑 Dossier subvention</h2><button class="mcl" onclick="closeM('m-subvention')">✕</button></div><div class="mb2"><div class="fg"><label>Type</label><select><option>Fonctionnement — Mairie</option><option>CNAF / CAF</option><option>DRAJES</option></select></div><div class="fr"><div class="fg"><label>Exercice</label><input type="number" value="2026"></div><div class="fg"><label>Montant demandé €</label><input type="number" value="8000"></div></div></div><div class="mf"><button class="btn bg2" onclick="closeM('m-subvention')">Annuler</button><button class="btn bpu" onclick="toast('📑 Dossier Cerfa généré');closeM('m-subvention')">✓ Générer Cerfa</button></div></div></div>
+
+<div id="toast"></div>
+<script>
+const DB={
+  centre:{nom:"Les Petits Explorateurs",adresse:"12 Rue des Tilleuls, 75000 Ville",tel:"01 23 45 67 89",email:"contact@petits-explorateurs.fr"},
+  user:{role:"admin",name:"Directeur·rice"},animateur:null,
+  enfants:[
+    {id:1,prenom:"Léa",nom:"Martin",age:7,groupe:"Moyens (6-8 ans)",parent:"Sophie Martin",tel:"06 12 34 56 78",email:"s.martin@email.fr",qf:"Tranche A",fratrie:0,pai:"Aucune",urgence:"Pierre Martin — 06 87 65 43 21",urg2:"",periode:"Périscolaire + Mercredi",sortie:"Non",photo:"Oui",autorise:"Pierre Martin",statut:"Actif",source:"direct",medecin:"Dr. Blanc",ss:"1 99 01 XXX XXX XX",sg:"A+",assu:"Fournie"},
+    {id:2,prenom:"Lucas",nom:"Durand",age:5,groupe:"Petits (3-5 ans)",parent:"Jean Durand",tel:"06 23 45 67 89",email:"j.durand@email.fr",qf:"Tranche B",fratrie:0,pai:"Allergie arachides ⚠",urgence:"Marie Durand — 06 98 76 54 32",urg2:"",periode:"Périscolaire + Mercredi",sortie:"Non",photo:"Oui",autorise:"Marie Durand",statut:"Actif",source:"direct",medecin:"Dr. Petit",ss:"2 99 01 XXX XXX XX",sg:"B+",assu:"Fournie"},
+    {id:3,prenom:"Emma",nom:"Bernard",age:10,groupe:"Grands (9-12 ans)",parent:"Claire Bernard",tel:"06 34 56 78 90",email:"c.bernard@email.fr",qf:"Tranche C",fratrie:0,pai:"Aucune",urgence:"Paul Bernard",urg2:"",periode:"Vacances",sortie:"Oui",photo:"Non",autorise:"Paul Bernard",statut:"Actif",source:"direct",medecin:"Dr. Martin",ss:"2 99 01 XXX XXX XX",sg:"",assu:"Fournie"},
+    {id:4,prenom:"Hugo",nom:"Petit",age:8,groupe:"Moyens (6-8 ans)",parent:"Marc Petit",tel:"06 45 67 89 01",email:"m.petit@email.fr",qf:"Tranche A",fratrie:1,pai:"Asthme — Ventoline ⚠",urgence:"Nathalie Petit",urg2:"",periode:"Toutes périodes",sortie:"Non",photo:"Oui",autorise:"Nathalie Petit",statut:"Actif",source:"direct",medecin:"Dr. Moreau",ss:"1 99 01 XXX XXX XX",sg:"O+",assu:"Fournie"},
+    {id:5,prenom:"Chloé",nom:"Moreau",age:4,groupe:"Petits (3-5 ans)",parent:"Anne Moreau",tel:"06 56 78 90 12",email:"a.moreau@email.fr",qf:"Tranche B",fratrie:0,pai:"Aucune",urgence:"Luc Moreau",urg2:"",periode:"Périscolaire + Mercredi",sortie:"Non",photo:"Oui",autorise:"Luc Moreau",statut:"Actif",source:"direct",medecin:"Dr. Simon",ss:"",sg:"",assu:"Non fournie"},
+    {id:6,prenom:"Nathan",nom:"Lefevre",age:9,groupe:"Grands (9-12 ans)",parent:"David Lefevre",tel:"06 67 89 01 23",email:"d.lefevre@email.fr",qf:"Tranche C",fratrie:0,pai:"Aucune",urgence:"Lucie Lefevre",urg2:"",periode:"Mercredi",sortie:"Oui",photo:"Oui",autorise:"Lucie Lefevre",statut:"En attente",source:"site",medecin:"—",ss:"",sg:"",assu:"Non fournie"},
+  ],
+  adhesions:[
+    {enfantId:1,mois:"Mai 2026",montant:28,statut:"Payée",date:"28/04/2026"},
+    {enfantId:2,mois:"Mai 2026",montant:28,statut:"Payée",date:"28/04/2026"},
+    {enfantId:3,mois:"Mai 2026",montant:28,statut:"Payée",date:"28/04/2026"},
+    {enfantId:4,mois:"Mai 2026",montant:21,statut:"Payée",date:"28/04/2026"},
+    {enfantId:5,mois:"Mai 2026",montant:28,statut:"En attente",date:"—"},
+    {enfantId:6,mois:"Mai 2026",montant:28,statut:"En attente",date:"—"},
+  ],
+  factures:[
+    {id:"F-2026-001",famille:"Martin",enfant:"Léa Martin",periode:"Avr 2026 — Périscolaire",brut:160.60,caf:48.18,adh:28,net:140.42,statut:"Payée",date:"01/04/2026",annee:2026},
+    {id:"F-2026-002",famille:"Durand",enfant:"Lucas Durand",periode:"Avr 2026 — Périscolaire",brut:126.42,caf:37.93,adh:28,net:116.49,statut:"Payée",date:"01/04/2026",annee:2026},
+    {id:"F-2026-003",famille:"Bernard",enfant:"Emma Bernard",periode:"Vacances Pâques",brut:224.00,caf:0,adh:28,net:252.00,statut:"En attente",date:"15/04/2026",annee:2026},
+    {id:"F-2026-004",famille:"Petit",enfant:"Hugo Petit",periode:"Avr 2026 — Périscolaire",brut:160.60,caf:48.18,adh:21,net:133.42,statut:"En retard",date:"01/04/2026",annee:2026},
+    {id:"F-2026-005",famille:"Moreau",enfant:"Chloé Moreau",periode:"Mai 2026 — Périscolaire",brut:108.86,caf:32.66,adh:28,net:104.20,statut:"En attente",date:"01/05/2026",annee:2026},
+  ],
+  facturesMairie:[
+    {id:"FM-2026-001",dest:"Mairie de Ville",periode:"Avr 2026",montant:1440,statut:"Payée",date:"01/04/2026"},
+    {id:"FM-2026-002",dest:"Mairie de Ville",periode:"Mai 2026",montant:1560,statut:"En attente",date:"01/05/2026"},
+  ],
+  subventions:[
+    {id:"SUB-2026-001",type:"Fonctionnement — Mairie",annee:2026,demande:8000,accorde:7200,statut:"Accordée",date:"15/01/2026"},
+    {id:"SUB-2026-002",type:"CNAF — Prestation",annee:2026,demande:12000,accorde:null,statut:"En cours",date:"01/03/2026"},
+  ],
+  equipe:[
+    {id:1,prenom:"Marie",nom:"Dupont",poste:"Animatrice principale",diplome:"BAFD",contrat:"CDI",h:35,hE:148,taux:13.50,email:"m.dupont@centre.fr",tel:"06 11 11 11 11",deb:"01/09/2022",fin:"",statut:"Actif",sm:"Oui",ss2:"Oui",mer:"Oui",vac:"Oui",col:"abl",pin:"1234",congesTotal:25,congesPris:8,coffre:"https://app.payfit.com/employees/1"},
+    {id:2,prenom:"Thomas",nom:"Robert",poste:"Animateur",diplome:"BAFA",contrat:"CEE",h:28,hE:112,taux:11.88,email:"t.robert@centre.fr",tel:"06 22 22 22 22",deb:"01/01/2026",fin:"31/08/2026",statut:"Actif",sm:"Oui",ss2:"Oui",mer:"Non",vac:"Oui",col:"agr",pin:"2345",congesTotal:15,congesPris:3,coffre:""},
+    {id:3,prenom:"Julie",nom:"Martin",poste:"Animatrice",diplome:"BPJEPS LTP",contrat:"CDI",h:35,hE:140,taux:12.50,email:"j.martin@centre.fr",tel:"06 33 33 33 33",deb:"15/03/2023",fin:"",statut:"Actif",sm:"Non",ss2:"Oui",mer:"Oui",vac:"Oui",col:"aor",pin:"3456",congesTotal:25,congesPris:5,coffre:""},
+    {id:4,prenom:"Luc",nom:"Bernard",poste:"Animateur",diplome:"BAFA",contrat:"CDD",h:24,hE:90,taux:11.88,email:"l.bernard@centre.fr",tel:"06 44 44 44 44",deb:"01/09/2025",fin:"31/08/2026",statut:"Actif",sm:"Oui",ss2:"Non",mer:"Oui",vac:"Non",col:"apu",pin:"4567",congesTotal:20,congesPris:4,coffre:""},
+    {id:5,prenom:"Sarah",nom:"Leroy",poste:"Animatrice",diplome:"BAFA",contrat:"CEE",h:21,hE:60,taux:11.88,email:"s.leroy@centre.fr",tel:"06 55 55 55 55",deb:"01/04/2026",fin:"30/06/2026",statut:"Actif",sm:"Non",ss2:"Oui",mer:"Non",vac:"Oui",col:"ate",pin:"5678",congesTotal:10,congesPris:2,coffre:""},
+    {id:6,prenom:"Paul",nom:"Simon",poste:"Intervenant musique",diplome:"Autre",contrat:"CDD",h:4,hE:14,taux:18.00,email:"p.simon@ext.fr",tel:"06 66 66 66 66",deb:"01/01/2026",fin:"30/06/2026",statut:"Actif",sm:"Non",ss2:"Non",mer:"Oui",vac:"Non",col:"abl",pin:"6789",congesTotal:5,congesPris:0,coffre:""},
+    {id:7,prenom:"Camille",nom:"Fontaine",poste:"Animatrice",diplome:"Stagiaire BAFA",contrat:"Stagiaire",h:35,hE:70,taux:0,email:"c.fontaine@email.fr",tel:"06 77 77 77 77",deb:"01/04/2026",fin:"30/05/2026",statut:"Actif",sm:"Oui",ss2:"Oui",mer:"Non",vac:"Non",col:"agr",pin:"7890",congesTotal:0,congesPris:0,coffre:""},
+    {id:8,prenom:"Alex",nom:"Mercier",poste:"Animateur",diplome:"BAFA",contrat:"CDI",h:35,hE:136,taux:12.00,email:"a.mercier@centre.fr",tel:"06 88 88 88 88",deb:"01/02/2024",fin:"",statut:"Congé",sm:"Oui",ss2:"Oui",mer:"Oui",vac:"Oui",col:"aor",pin:"8901",congesTotal:25,congesPris:12,coffre:"https://app.payfit.com/employees/8"},
+  ],
+  activites:[
+    {nom:"Arts plastiques",anim:"Marie D.",groupe:"Tous",max:15,inscrits:12,horaire:"Mer 14h–16h",desc:"Peinture, collage, sculpture."},
+    {nom:"Football",anim:"Thomas R.",groupe:"Grands",max:14,inscrits:10,horaire:"Mar & Jeu 17h30",desc:"Entraînement et matchs."},
+    {nom:"Théâtre",anim:"Julie M.",groupe:"Moyens",max:10,inscrits:8,horaire:"Mer 10h–12h",desc:"Expression, improvisation."},
+    {nom:"Jardinage",anim:"Luc B.",groupe:"Petits",max:8,inscrits:6,horaire:"Mer 9h–10h30",desc:"Potager, nature."},
+    {nom:"Jeux coopératifs",anim:"Sarah L.",groupe:"Tous",max:20,inscrits:15,horaire:"Lun–Ven 16h30",desc:"Jeux de société."},
+    {nom:"Musique & Rythme",anim:"Paul S.",groupe:"Petits",max:10,inscrits:7,horaire:"Mer 11h–12h",desc:"Percussions, chant."},
+  ],
+  emails:[
+    {id:1,from:"Sophie Martin",mail:"s.martin@email.fr",subj:"Inscription Léa — semaine du 5 mai",prev:"Bonjour, je souhaite inscrire…",body:"Bonjour,\n\nJe souhaiterais inscrire Léa pour la semaine du 5 au 9 mai.\n\nCordialement,\nSophie Martin",time:"09:14",date:"Aujourd'hui",cat:"inscription",unread:true,tr:false},
+    {id:2,from:"Jean Durand",mail:"j.durand@email.fr",subj:"Règlement facture F-2026-002",prev:"Confirmation de virement…",body:"Bonjour,\n\nVeuillez trouver la confirmation de virement pour F-2026-002 — 88,49€.\n\nJean Durand",time:"08:32",date:"Aujourd'hui",cat:"paiement",unread:true,tr:false},
+    {id:3,from:"CAF Allocations",mail:"noreply@caf.fr",subj:"Attestation QF — Famille Petit",prev:"Attestation de droits…",body:"Madame, Monsieur,\n\nVeuillez trouver l'attestation QF de la famille Petit. QF : 380.\n\nCAF",time:"14:20",date:"Hier",cat:"admin",unread:true,tr:false},
+    {id:4,from:"Anne Moreau",mail:"a.moreau@email.fr",subj:"Absence Chloé — jeudi 2 mai",prev:"Ma fille sera absente…",body:"Bonjour,\n\nChloé Moreau sera absente le jeudi 2 mai.\n\nAnne Moreau",time:"18:55",date:"Hier",cat:"info",unread:true,tr:false},
+    {id:5,from:"David Lefevre",mail:"d.lefevre@email.fr",subj:"[Site] Pré-inscription Nathan",prev:"[AUTO] Nouvelle pré-inscription…",body:"[AUTO — site internet]\n\nEnfant : Nathan Lefevre, 9 ans\nPériode : Mercredi\nAjouté automatiquement en attente.",time:"16:42",date:"Hier",cat:"inscription",unread:true,tr:true},
+    {id:6,from:"Mairie Jeunesse",mail:"jeunesse@mairie.fr",subj:"Subvention 2026 — dossier",prev:"Dossier à compléter…",body:"Madame, Monsieur,\n\nNous vous invitons à compléter votre dossier de subvention 2026.\n\nDate limite : 30 mai 2026.",time:"10:00",date:"28/04/2026",cat:"admin",unread:false,tr:false},
+  ],
+  presences:{},presLog:[],
+  notifs:[
+    {ico:"📝",title:"Pré-inscription reçue (site)",text:"Nathan Lefevre — Mercredi",time:"il y a 3h",unread:true},
+    {ico:"⚠",title:"Facture en retard",text:"Famille Petit — F-2026-004",time:"il y a 5h",unread:true},
+    {ico:"💳",title:"Adhésion non payée — accès bloqué",text:"Chloé Moreau & Nathan Lefevre",time:"il y a 2h",unread:true},
+    {ico:"📋",title:"Contrat expirant",text:"Thomas Robert — CEE — 31/08/2026",time:"hier",unread:true},
+    {ico:"⛔",title:"Dossier incomplet",text:"Chloé Moreau & Nathan Lefevre",time:"hier",unread:true},
+  ],
+  planOffset:0,
+};
+
+const T={dashboard:"Tableau de bord",enfants:"Gestion des enfants",presences:"Présences",adhesions:"Adhésions",activites:"Activités",factures:"Facturation",mairie:"Mairie & Subventions",documents:"Documents familles",equipe:"Équipe",planning:"Planning auto",vacances:"Heures vacances",contrats:"Contrats & RH","anim-view":"Mon espace","anim-presences":"Pointer les présences",emails:"Messagerie",parametres:"Paramètres"};
+
+// LOGIN
+let pinTarget=null,pinCur="";
+function switchL(m,el){document.querySelectorAll(".ltab").forEach(t=>t.classList.remove("on"));el.classList.add("on");document.getElementById("la").style.display=m==="admin"?"block":"none";document.getElementById("lam").style.display=m==="anim"?"block":"none";if(m==="anim")renderPU();}
+function renderPU(){document.getElementById("pusers").innerHTML=DB.equipe.filter(a=>a.statut==="Actif").map(a=>`<div class="puser" id="pu-${a.id}" onclick="selPU(${a.id})"><div class="av ${a.col}" style="width:30px;height:30px;font-size:.7rem;">${a.prenom[0]}${a.nom[0]}</div><div><div class="puser-n">${a.prenom} ${a.nom}</div><div class="puser-r">${a.poste}</div></div></div>`).join("");}
+function selPU(id){document.querySelectorAll(".puser").forEach(p=>p.classList.remove("sel"));document.getElementById("pu-"+id).classList.add("sel");pinTarget=id;pinCur="";document.getElementById("pinzone").style.display="block";renderPD();renderPG();}
+function renderPD(){document.getElementById("pindisp").innerHTML=[0,1,2,3].map(i=>`<div class="pin-dot ${i<pinCur.length?"on":""}"></div>`).join("");}
+function renderPG(){document.getElementById("pingrid").innerHTML=["1","2","3","4","5","6","7","8","9","⌫","0","✓"].map(k=>`<div class="pkey" onclick="pinK('${k}')">${k}</div>`).join("");}
+function pinK(k){if(k==="⌫"){pinCur=pinCur.slice(0,-1);renderPD();return;}if(k==="✓"||pinCur.length===4){checkPin();return;}if(pinCur.length<4){pinCur+=k;renderPD();}if(pinCur.length===4)setTimeout(checkPin,200);}
+function checkPin(){const a=DB.equipe.find(x=>x.id===pinTarget);if(a&&pinCur===a.pin){loginAnim(a);}else{pinCur="";renderPD();toast("❌ Code PIN incorrect");}}
+function loginAdmin(){DB.user={role:"admin",name:"Directeur·rice"};DB.animateur=null;startApp();}
+function loginAnim(a){DB.user={role:"anim",name:a.prenom+" "+a.nom};DB.animateur=a;startApp();go("anim-view",null);}
+function startApp(){document.getElementById("login-screen").style.display="none";document.getElementById("sb-name").textContent=DB.user.name;document.getElementById("sb-role").textContent=DB.user.role==="admin"?"Administration":"Animateur·rice";document.getElementById("sb-av").textContent=DB.user.name.split(" ").map(w=>w[0]).join("").substring(0,2).toUpperCase();if(DB.user.role==="anim"){document.getElementById("btn-ae").style.display="none";document.getElementById("btn-af").style.display="none";}renderDash();renderN();}
+function logout(){document.getElementById("login-screen").style.display="flex";DB.user={role:"admin",name:"Directeur·rice"};DB.animateur=null;pinCur="";pinTarget=null;document.getElementById("btn-ae").style.display="";document.getElementById("btn-af").style.display="";switchL("admin",document.querySelector(".ltab"));}
+
+// NAV
+function go(id,el){document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));const v=document.getElementById("v-"+id);if(!v)return;v.classList.add("active");document.querySelectorAll(".ni").forEach(n=>n.classList.remove("on"));if(el)el.classList.add("on");document.getElementById("tbt").textContent=T[id]||id;const r={dashboard:renderDash,enfants:()=>renderE(DB.enfants),presences:()=>{setTD();loadP();},adhesions:renderAdh,activites:renderAct,factures:()=>renderFac(""),mairie:()=>renderMairie("factures"),documents:()=>renderDoc("dossier"),equipe:renderEq,planning:renderPlan,vacances:renderVac,contrats:()=>renderC("contrats"),emails:renderEM,"anim-view":renderAnimView,"anim-presences":()=>{document.getElementById("apd").value=new Date().toISOString().split("T")[0];loadAnimP();}};if(r[id])r[id]();}
+
+// DASHBOARD
+function renderDash(){
+  document.getElementById("dd").textContent=new Date().toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+  const d=["Lun","Mar","Mer","Jeu","Ven"],v=[16,18,22,17,18],mx=22;
+  document.getElementById("dc").innerHTML=v.map((val,i)=>`<div class="bitem"><span class="bval">${val}</span><div class="bbar" style="height:${(val/mx*55)}px;background:${i===2?"var(--gr)":"var(--acc)"};border-radius:3px 3px 0 0;"></div><span class="blbl">${d[i]}</span></div>`).join("");
+  document.getElementById("da").innerHTML=[{ico:"⚠",t:"Facture en retard — Famille Petit",c:"ard"},{ico:"💳",t:"Adhésion non payée — Chloé & Nathan (accès bloqué)",c:"ard"},{ico:"⛔",t:"Dossier incomplet — Chloé Moreau & Nathan Lefevre",c:"aor"},{ico:"📋",t:"Contrat CEE expire 31/08 — Thomas Robert",c:"abl"},{ico:"🏛",t:"Subvention mairie — avant le 30/05",c:"aor"}].map(a=>`<div class="abox ${a.c}"><span>${a.ico}</span><span style="color:var(--tx2);flex:1;font-size:.74rem;">${a.t}</span></div>`).join("");
+  document.getElementById("di").innerHTML=DB.enfants.slice(-4).reverse().map(e=>{const adh=DB.adhesions.find(a=>a.enfantId===e.id&&a.mois==="Mai 2026");return`<tr><td><strong>${e.prenom} ${e.nom}</strong></td><td><span class="tag tb2" style="font-size:.58rem;">${e.groupe.split(" ")[0]}</span></td><td><span style="font-size:.65rem;font-weight:700;padding:2px 6px;border-radius:8px;background:${adh&&adh.statut==="Payée"?"var(--grl)":"var(--rdl)"};color:${adh&&adh.statut==="Payée"?"var(--gr)":"var(--rd)"};">${adh?adh.statut:"—"}</span></td><td><span class="tag ${e.statut==="Actif"?"tg":"to"}">${e.statut}</span></td></tr>`;}).join("");
+  document.getElementById("dp").innerHTML=DB.equipe.slice(0,5).map(a=>`<tr><td><strong>${a.prenom} ${a.nom}</strong></td><td><span class="tag ${a.statut==="Actif"?"tg":"to"}">${a.statut}</span></td><td style="color:${(a.congesTotal-a.congesPris)<5?"var(--rd)":"var(--gr)"};">${a.congesTotal-a.congesPris}j</td></tr>`).join("");
+}
+
+// ENFANTS
+const avc=["abl","agr","aor","apu","ate"];
+function ac(id){return avc[id%avc.length];}
+function getDossier(e){const m=[];if(!e.medecin||e.medecin==="—")m.push("Médecin");if(!e.ss)m.push("N°SS");if(!e.urgence)m.push("Urgence");if(e.assu!=="Fournie")m.push("Assurance");if(!e.autorise)m.push("Pers. autorisées");return m;}
+function getTarif(e){if(e.fratrie===0)return e.qf;const t=["Tranche A","Tranche B","Tranche C"];const i=t.indexOf(e.qf);return i>0?t[i-1]+" (fratrie)":e.qf+" (fratrie)";}
+function renderE(list){
+  document.getElementById("ec").textContent=`${list.length} enfant${list.length>1?"s":""} — ${list.filter(e=>e.statut==="Actif").length} actifs`;
+  document.getElementById("nb-e").textContent=list.length;
+  document.getElementById("te").innerHTML=list.map(e=>{const m=getDossier(e);const adh=DB.adhesions.find(a=>a.enfantId===e.id&&a.mois==="Mai 2026");return`<tr><td><div class="av ${ac(e.id)}" style="width:24px;height:24px;font-size:.62rem;">${e.prenom[0]}${e.nom[0]}</div></td><td><strong>${e.prenom} ${e.nom}</strong>${e.source==="site"?"<span class=\"tag tt\" style=\"margin-left:4px;font-size:.57rem;\">web</span>":""}</td><td>${e.age}a·<span class="tag tb2" style="font-size:.58rem;">${e.groupe.split(" ")[0]}</span></td><td>${e.parent}</td><td style="color:var(--tx3);font-size:.72rem;">${e.tel}</td><td><span class="tag ${e.fratrie>0?"tg":"tp"}" style="font-size:.58rem;">${getTarif(e)}</span></td><td>${e.fratrie>0?"<span class=\"tag tg\" style=\"font-size:.57rem;\">👨‍👩‍👦</span>":"—"}</td><td>${e.pai!=="Aucune"?"<span class=\"tag to\">⚠</span>":"—"}</td><td><span style="font-size:.65rem;font-weight:700;padding:2px 6px;border-radius:8px;background:${adh&&adh.statut==="Payée"?"var(--grl)":"var(--rdl)"};color:${adh&&adh.statut==="Payée"?"var(--gr)":"var(--rd)"};">${adh?adh.statut:"—"}</span>${adh&&adh.statut!=="Payée"?"<span class=\"tag tr2\" style=\"margin-left:3px;font-size:.55rem;\">BLOQUÉ</span>":""}</td><td title="${m.length?"Manque: "+m.join(", "):"Dossier complet"}">${m.length===0?"<span class=\"tag tg\">✅ OK</span>":"<span class=\"tag tr2\" style=\"cursor:pointer;\">⛔ Incomplet</span>"}</td><td><span class="tag ${e.statut==="Actif"?"tg":"to"}">${e.statut}</span></td><td style="display:flex;gap:3px;"><button class="btn bg2 bsm" onclick="genFicheInscription(DB.enfants.find(x=>x.id===${e.id}))">📋</button><button class="btn bg2 bsm" onclick="toast('👁 ${e.prenom} ${e.nom}')">👁</button></td></tr>`;}).join("");
+}
+function filterE(q){renderE(q?DB.enfants.filter(e=>(e.prenom+" "+e.nom+e.parent).toLowerCase().includes(q.toLowerCase())):DB.enfants);}
+function filterEPer(v){renderE(v?DB.enfants.filter(e=>e.periode.toLowerCase().includes(v.toLowerCase())):DB.enfants);}
+function filterEQF(v){renderE(v?DB.enfants.filter(e=>e.qf.includes(v)):DB.enfants);}
+function tabE(t,el){document.querySelectorAll("#v-enfants .tab").forEach(x=>x.classList.remove("on"));el.classList.add("on");const m={tous:DB.enfants,petits:DB.enfants.filter(e=>e.groupe.includes("3-5")),moyens:DB.enfants.filter(e=>e.groupe.includes("6-8")),grands:DB.enfants.filter(e=>e.groupe.includes("9-12")),pai:DB.enfants.filter(e=>e.pai!=="Aucune"),attente:DB.enfants.filter(e=>e.statut!=="Actif"),incomplet:DB.enfants.filter(e=>getDossier(e).length>0)};renderE(m[t]||DB.enfants);}
+function checkDossier(){const p=document.getElementById("ep").value,n=document.getElementById("en").value,dn=document.getElementById("edn").value,par=document.getElementById("epar").value,tel=document.getElementById("etel").value,emed=document.getElementById("emed").value,ess=document.getElementById("ess").value,eu1=document.getElementById("eu1").value,eauto=document.getElementById("eauto").value,eassu=document.getElementById("eassu").value;const m=[];if(!p)m.push("Prénom");if(!n)m.push("Nom");if(!dn)m.push("Date naissance");if(!par)m.push("Responsable");if(!tel)m.push("Téléphone");if(!emed)m.push("Médecin");if(!ess)m.push("N°SS");if(!eu1)m.push("Contact urgence");if(!eauto)m.push("Personnes autorisées");if(eassu!=="Fournie")m.push("Assurance RC");document.getElementById("dossier-check").innerHTML=m.length===0?"<div style=\"background:var(--grl);border:1px solid var(--gr);border-radius:7px;padding:8px 10px;font-size:.73rem;color:var(--gr);font-weight:700;margin-top:8px;\">✅ Dossier complet — inscription autorisée</div>":`<div style="background:var(--rdl);border:1px solid var(--rd);border-radius:7px;padding:8px 10px;font-size:.73rem;color:var(--rd);font-weight:700;margin-top:8px;">⛔ Dossier incomplet — manque : ${m.join(", ")}</div>`;}
+function addE(){const p=document.getElementById("ep").value.trim(),n=document.getElementById("en").value.trim();if(!p||!n){toast("⚠ Prénom et nom obligatoires");return;}const dn=document.getElementById("edn").value,par=document.getElementById("epar").value,tel=document.getElementById("etel").value,emed=document.getElementById("emed").value,ess=document.getElementById("ess").value,eu1=document.getElementById("eu1").value,eauto=document.getElementById("eauto").value,eassu=document.getElementById("eassu").value;const m=[];if(!dn)m.push("Date naissance");if(!par)m.push("Responsable");if(!tel)m.push("Tél");if(!emed)m.push("Médecin");if(!ess)m.push("N°SS");if(!eu1)m.push("Urgence");if(!eauto)m.push("Personnes autorisées");if(eassu!=="Fournie")m.push("Assurance RC");if(m.length>0){toast("⛔ Inscription refusée — manque : "+m.join(", "));document.getElementById("dossier-check").innerHTML=`<div style="background:var(--rdl);border:1px solid var(--rd);border-radius:7px;padding:8px 10px;font-size:.73rem;color:var(--rd);font-weight:700;margin-top:8px;">⛔ Impossible — manque : ${m.join(", ")}</div>`;return;}const age=dn?Math.floor((new Date()-new Date(dn))/(365.25*24*3600*1000)):"?";DB.enfants.push({id:Date.now(),prenom:p,nom:n,age,groupe:document.getElementById("eg").value,parent:par,tel,email:document.getElementById("eemail").value,qf:document.getElementById("eqf").value.split("(")[0].trim(),fratrie:parseInt(document.getElementById("efratrie").value)||0,pai:document.getElementById("epai").value||"Aucune",urgence:eu1,urg2:document.getElementById("eu2").value,periode:document.getElementById("eper").value,sortie:document.getElementById("esortie").value,photo:document.getElementById("ephoto").value,autorise:eauto,statut:"Actif",source:"direct",medecin:emed,ss:ess,sg:document.getElementById("esg").value,assu:eassu});document.getElementById("kv-e").textContent=DB.enfants.length;addN("👦","Enfant inscrit — dossier complet",p+" "+n);closeM("m-enfant");renderE(DB.enfants);toast("✅ "+p+" "+n+" inscrit·e — dossier complet");}
+
+// PRESENCES
+function setTD(){document.getElementById("pd").value=new Date().toISOString().split("T")[0];}
+function loadP(){
+  const dt=document.getElementById("pd").value||new Date().toISOString().split("T")[0];
+  const gr=document.getElementById("pg2").value;
+  let list=DB.enfants.filter(e=>e.statut==="Actif");if(gr)list=list.filter(e=>e.groupe===gr);
+  if(!DB.presences[dt])DB.presences[dt]={};const data=DB.presences[dt];
+  const pr=list.filter(e=>data[e.id]==="present").length,ab=list.filter(e=>data[e.id]==="absent").length,lat=list.filter(e=>data[e.id]==="retard").length;
+  document.getElementById("ps").innerHTML=`<div class="kpi"><div class="kv" style="color:var(--gr);">${pr}</div><div class="kl">Présents</div></div><div class="kpi"><div class="kv" style="color:var(--rd);">${ab}</div><div class="kl">Absents</div></div><div class="kpi"><div class="kv" style="color:var(--or);">${lat}</div><div class="kl">Retards</div></div><div class="kpi"><div class="kv">${list.length}</div><div class="kl">Total</div></div>`;
+  document.getElementById("pc").textContent=`${pr} présents / ${list.length}`;
+  document.getElementById("pt2").textContent="Présences du "+new Date(dt+"T12:00").toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"long"});
+  document.getElementById("pl").innerHTML=list.map(e=>{const s=data[e.id];const adh=DB.adhesions.find(a=>a.enfantId===e.id&&a.mois==="Mai 2026");const bl=!adh||adh.statut!=="Payée";return`<div class="prow ${s==="present"?"pr":s==="absent"?"ab":s==="retard"?"lat":""}"><div class="av ${ac(e.id)}" style="width:26px;height:26px;font-size:.64rem;">${e.prenom[0]}${e.nom[0]}</div><div style="flex:1;"><div style="font-weight:600;font-size:.8rem;">${e.prenom} ${e.nom}${bl?"<span class=\"tag tr2\" style=\"margin-left:4px;font-size:.56rem;\">💳 ADH. DUE</span>":""}</div><div style="font-size:.66rem;color:var(--tx3);">${e.groupe.split(" ")[0]} · ${e.age}a${e.pai!=="Aucune"?" · <span style=\"color:var(--or);\">⚠PAI</span>":""}</div></div><div class="ptgl">${bl?"<span style=\"font-size:.68rem;color:var(--rd);font-weight:700;\">Adhésion requise</span>":`<button class="pt ${s==="present"?"yes":""}" onclick="sp(${e.id},'${dt}','present')">✓ Arrivé</button><button class="pt lat2 ${s==="retard"?"lat2":""}" onclick="sp(${e.id},'${dt}','retard')">⏰</button><button class="pt ${s==="absent"?"no":""}" onclick="sp(${e.id},'${dt}','absent')">✗ Absent</button>`}</div></div>`;}).join("");
+  document.getElementById("pjournal").innerHTML=DB.presLog.slice(-8).reverse().map(l=>`<div style="padding:3px 0;border-bottom:1px solid var(--bd);display:flex;gap:7px;align-items:center;"><span style="font-size:.66rem;color:var(--tx3);min-width:42px;">${l.time}</span><span class="tag ${l.type==="present"?"tg":l.type==="retard"?"to":"tr2"}" style="font-size:.6rem;">${l.type==="present"?"Arrivée":l.type==="retard"?"Retard":"Absent"}</span><span style="font-size:.74rem;">${l.name}</span></div>`).join("")||"<div style="color:var(--tx3);font-size:.74rem;">Aucun mouvement</div>";
+}
+function sp(id,dt,v){if(!DB.presences[dt])DB.presences[dt]={};DB.presences[dt][id]=v;const e=DB.enfants.find(x=>x.id===id);DB.presLog.push({time:new Date().toLocaleTimeString("fr",{hour:"2-digit",minute:"2-digit"}),name:e.prenom+" "+e.nom,type:v});loadP();}
+function saveP(){toast("💾 Présences sauvegardées");}
+
+function loadAnimP(){
+  const dt=document.getElementById("apd").value;if(!DB.presences[dt])DB.presences[dt]={};const data=DB.presences[dt];
+  const list=DB.enfants.filter(e=>e.statut==="Actif");const pr=list.filter(e=>data[e.id]==="present").length;
+  document.getElementById("aps").innerHTML=`<div class="kpi"><div class="kv" style="color:var(--gr);">${pr}</div><div class="kl">Présents</div></div><div class="kpi"><div class="kv" style="color:var(--rd);">${list.filter(e=>data[e.id]==="absent").length}</div><div class="kl">Absents</div></div><div class="kpi"><div class="kv" style="color:var(--or);">${list.filter(e=>data[e.id]==="retard").length}</div><div class="kl">Retards</div></div><div class="kpi"><div class="kv">${list.length}</div><div class="kl">Total</div></div>`;
+  document.getElementById("apl").innerHTML=list.map(e=>{const s=data[e.id];const adh=DB.adhesions.find(a=>a.enfantId===e.id&&a.mois==="Mai 2026");const bl=!adh||adh.statut!=="Payée";return`<div style="background:var(--card);border:2px solid ${s==="present"?"var(--gr)":s==="absent"?"var(--rd)":s==="retard"?"var(--or)":"var(--bd)"};border-radius:10px;padding:12px;"><div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><div class="av ${ac(e.id)}" style="width:32px;height:32px;font-size:.75rem;">${e.prenom[0]}${e.nom[0]}</div><div><div style="font-weight:700;font-size:.84rem;">${e.prenom} ${e.nom}</div><div style="font-size:.68rem;color:var(--tx3);">${e.groupe.split(" ")[0]} · ${e.age} ans${e.pai!=="Aucune"?" · <span style=\"color:var(--or);\">⚠</span>":""}</div></div></div>${bl?`<div style="text-align:center;font-size:.7rem;color:var(--rd);font-weight:700;padding:6px;background:var(--rdl);border-radius:6px;">💳 Adhésion requise avant accueil</div>`:`<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;"><button onclick="sp(${e.id},'${dt}','present')" style="padding:7px 2px;border-radius:6px;border:none;background:${s==="present"?"var(--gr)":"var(--bg)"};color:${s==="present"?"#fff":"var(--tx3)"};cursor:pointer;font-size:.68rem;font-weight:700;font-family:Sora;">✓ Arrivé</button><button onclick="sp(${e.id},'${dt}','retard')" style="padding:7px 2px;border-radius:6px;border:none;background:${s==="retard"?"var(--or)":"var(--bg)"};color:${s==="retard"?"#fff":"var(--tx3)"};cursor:pointer;font-size:.68rem;font-weight:700;font-family:Sora;">⏰ Retard</button><button onclick="sp(${e.id},'${dt}','absent')" style="padding:7px 2px;border-radius:6px;border:none;background:${s==="absent"?"var(--rd)":"var(--bg)"};color:${s==="absent"?"#fff":"var(--tx3)"};cursor:pointer;font-size:.68rem;font-weight:700;font-family:Sora;">✗ Absent</button></div>`}</div>`;}).join("");
+}
+
+// ADHESIONS
+function renderAdh(){
+  document.getElementById("nb-adh").textContent=DB.adhesions.filter(a=>a.statut!=="Payée").length||"";
+  document.getElementById("adh-ok-v").textContent=DB.adhesions.filter(a=>a.statut==="Payée").length;
+  document.getElementById("adh-ko-v").textContent=DB.adhesions.filter(a=>a.statut!=="Payée").length;
+  document.getElementById("adh-fam").innerHTML=DB.enfants.map(e=>`<option value="${e.id}">${e.parent} (${e.prenom} ${e.nom})</option>`).join("");
+  document.getElementById("tadh").innerHTML=DB.enfants.map(e=>{const adh=DB.adhesions.find(a=>a.enfantId===e.id&&a.mois==="Mai 2026");const fr=e.fratrie>0;return`<tr><td><strong>${e.parent}</strong></td><td>${e.prenom} ${e.nom}</td><td>${fr?"<span class=\"tag tg\">👨‍👩‍👦 Oui</span>":"—"}</td><td><span class="tag tp" style="font-size:.6rem;">${getTarif(e)}</span></td><td><strong>${fr?21:28}€</strong></td><td style="font-size:.72rem;color:var(--tx3);">${adh?adh.date:"—"}</td><td><span style="font-size:.66rem;font-weight:700;padding:2px 6px;border-radius:8px;background:${adh&&adh.statut==="Payée"?"var(--grl)":"var(--rdl)"};color:${adh&&adh.statut==="Payée"?"var(--gr)":"var(--rd)"};">${adh?adh.statut:"Non payée"}</span></td><td>${adh&&adh.statut==="Payée"?"<span class=\"tag tg\">✅ OK</span>":"<span class=\"tag tr2\">🚫 Bloqué</span>"}</td><td>${!adh||adh.statut!=="Payée"?`<button class="btn bgr bsm" onclick="payAdh(${e.id})">✓</button>`:""}</td></tr>`;}).join("");
+}
+function payAdh(id){const e=DB.enfants.find(x=>x.id===id);const i=DB.adhesions.findIndex(a=>a.enfantId===id&&a.mois==="Mai 2026");if(i>=0)DB.adhesions[i].statut="Payée";else DB.adhesions.push({enfantId:id,mois:"Mai 2026",montant:e.fratrie>0?21:28,statut:"Payée",date:new Date().toLocaleDateString("fr")});renderAdh();addN("💳","Adhésion validée",e.prenom+" "+e.nom+" — accès débloqué");toast("✅ Adhésion validée — "+e.prenom+" "+e.nom);}
+function addAdhesion(){closeM("m-adhesion");renderAdh();toast("✅ Paiement enregistré");}
+
+// ACTIVITES
+function renderAct(){document.getElementById("acr").innerHTML=DB.equipe.map(a=>`<option>${a.prenom} ${a.nom[0]}.</option>`).join("");document.getElementById("ag").innerHTML=DB.activites.map(a=>{const p=Math.round(a.inscrits/a.max*100);return`<div class="card" style="padding:14px;"><div style="display:flex;justify-content:space-between;margin-bottom:8px;"><div><div style="font-weight:700;font-size:.82rem;">${a.nom}</div><div style="font-size:.67rem;color:var(--tx3);">👤 ${a.anim} · ${a.horaire}</div></div><span class="tag tb2" style="font-size:.59rem;">${a.groupe}</span></div><p style="font-size:.7rem;color:var(--tx3);margin-bottom:9px;">${a.desc}</p><div class="pbar"><div class="pfill ${p>80?"por":"pbl"}" style="width:${p}%"></div></div><div style="display:flex;justify-content:space-between;font-size:.64rem;color:var(--tx3);margin-top:3px;"><span>${a.inscrits} inscrits</span><span>${a.max} places</span></div></div>`;}).join("");}
+function addAct(){const n=document.getElementById("acn").value.trim();if(!n){toast("⚠ Nom obligatoire");return;}DB.activites.push({nom:n,anim:document.getElementById("acr").value,groupe:document.getElementById("acg").value,max:parseInt(document.getElementById("acm").value)||12,inscrits:0,horaire:document.getElementById("ach").value,desc:document.getElementById("acd").value});closeM("m-activite");renderAct();toast("✅ Activité \""+n+"\" créée");}
+
+// FACTURES
+function renderFac(f){const list=f?DB.factures.filter(x=>x.statut===f):DB.factures;document.getElementById("nb-f").textContent=DB.factures.filter(x=>x.statut!=="Payée").length||"";document.getElementById("tf").innerHTML=list.map(fac=>`<tr><td style="color:var(--acc);font-weight:700;font-family:JetBrains Mono;font-size:.71rem;">${fac.id}</td><td><strong>${fac.famille}</strong><br><span style="font-size:.67rem;color:var(--tx3);">${fac.enfant}</span></td><td style="font-size:.7rem;color:var(--tx3);">${fac.periode}</td><td>${fac.brut.toFixed(2)}€</td><td style="color:var(--gr);">−${fac.caf.toFixed(2)}€</td><td style="color:var(--acc);">+${fac.adh}€</td><td><strong>${fac.net.toFixed(2)}€</strong></td><td><button class="btn bg2 bsm" onclick="genAttFiscale('${fac.id}')">📄</button></td><td><span class="tag ${fac.statut==="Payée"?"tg":fac.statut==="En attente"?"to":"tr2"}">${fac.statut}</span></td><td style="display:flex;gap:3px;"><button class="btn bg2 bsm" onclick="printFac('${fac.id}')">🖨</button>${fac.statut!=="Payée"?`<button class="btn bgr bsm" onclick="payFac('${fac.id}')">✓</button>`:""}</td></tr>`).join("");}
+function payFac(id){const f=DB.factures.find(x=>x.id===id);if(f){f.statut="Payée";renderFac("");toast("✅ "+id+" payée");}}
+function addFac(){const fam=document.getElementById("ff").value;const id="F-2026-"+String(DB.factures.length+1).padStart(3,"0");DB.factures.push({id,famille:fam.split(" ")[0],enfant:fam,periode:document.getElementById("fper").value,brut:160.60,caf:48.18,adh:28,net:140.42,statut:"En attente",date:new Date().toLocaleDateString("fr"),annee:2026});closeM("m-facture");renderFac("");addN("🧾","Facture créée",id);toast("✅ Facture "+id+" + attestation fiscale");}
+function calcF(){const inputs=document.querySelectorAll("#m-facture tbody input");const prices=[2.5,2.5,3.5,1.2],ids=["r1","r2","r3","r4"];let sub=28;inputs.forEach((inp,i)=>{const t=(parseFloat(inp.value)||0)*prices[i];document.getElementById(ids[i]).textContent=t.toFixed(2)+"€";sub+=t;});const caf=(sub-28)*0.3;document.getElementById("fsub").textContent=sub.toFixed(2)+"€";document.getElementById("fcaf").textContent="−"+caf.toFixed(2)+"€";document.getElementById("fnet").textContent=(sub-caf).toFixed(2)+"€";}
+
+// MAIRIE
+function renderMairie(tab){document.querySelectorAll("#v-mairie .tab").forEach((t,i)=>{t.classList.toggle("on",["factures","conventions","subventions","bordereau"][i]===tab);});const el=document.getElementById("mairie-content");if(tab==="factures"){el.innerHTML=`<div class="card"><div style="overflow-x:auto;"><table><thead><tr><th>N°</th><th>Dest.</th><th>Période</th><th>Montant</th><th>Statut</th><th>Date</th><th></th></tr></thead><tbody>${DB.facturesMairie.map(f=>`<tr><td style="font-weight:700;color:var(--acc);font-family:JetBrains Mono;font-size:.7rem;">${f.id}</td><td><strong>${f.dest}</strong></td><td>${f.periode}</td><td><strong>${f.montant}€</strong></td><td><span class="tag ${f.statut==="Payée"?"tg":"to"}">${f.statut}</span></td><td style="color:var(--tx3);">${f.date}</td><td><button class="btn bg2 bsm" onclick="toast('🖨 Imprimé')">🖨</button></td></tr>`).join("")}</tbody></table></div></div>`;}else if(tab==="subventions"){el.innerHTML=`<div class="krow k3 mb14"><div class="kpi"><div class="kv" style="color:var(--gr);">7 200€</div><div class="kl">Subvention mairie 2026</div></div><div class="kpi"><div class="kv" style="color:var(--or);">12 000€</div><div class="kl">CNAF — en cours</div></div><div class="kpi"><div class="kv">2</div><div class="kl">Dossiers déposés</div></div></div><div class="card"><div style="overflow-x:auto;"><table><thead><tr><th>Réf.</th><th>Type</th><th>Demandé</th><th>Accordé</th><th>Statut</th><th>Date</th><th></th></tr></thead><tbody>${DB.subventions.map(s=>`<tr><td style="font-family:JetBrains Mono;font-size:.7rem;">${s.id}</td><td><strong>${s.type}</strong></td><td>${s.demande}€</td><td>${s.accorde?s.accorde+"€":"—"}</td><td><span class="tag ${s.statut==="Accordée"?"tg":"to"}">${s.statut}</span></td><td style="color:var(--tx3);">${s.date}</td><td><button class="btn bg2 bsm" onclick="toast('📑 Dossier')">📑</button></td></tr>`).join("")}</tbody></table></div></div>`;}else if(tab==="conventions"){el.innerHTML=`<div class="card" style="padding:15px;">${[{n:"Convention ALSH périscolaire 2025–2026",d:"01/09/2025",f:"31/08/2026",mt:"28 800€/an"},{n:"Convention CLSH vacances 2026",d:"01/01/2026",f:"31/12/2026",mt:"9 600€/an"}].map(c=>`<div style="display:flex;align-items:center;gap:11px;padding:10px 12px;background:var(--bg);border-radius:8px;margin-bottom:7px;"><div style="flex:1;"><div style="font-weight:700;font-size:.8rem;">${c.n}</div><div style="font-size:.68rem;color:var(--tx3);">Mairie · ${c.d}→${c.f} · ${c.mt}</div></div><span class="tag tg">Active</span><button class="btn bg2 bsm" onclick="toast('📄 Convention')">📄</button></div>`).join("")}</div>`;}else if(tab==="bordereau"){el.innerHTML=`<div class="card" style="padding:15px;"><div style="margin-bottom:11px;"><div style="font-weight:700;">Bordereau de reversement CAF</div><div style="font-size:.7rem;color:var(--tx3);">À transmettre à la CAF chaque trimestre</div></div><table><thead><tr><th>Famille</th><th>QF</th><th>Brut</th><th>Déduction CAF</th><th>Net famille</th></tr></thead><tbody>${DB.enfants.filter(e=>e.statut==="Actif").map(e=>{const facs=DB.factures.filter(f=>f.famille===e.nom);const brut=facs.reduce((s,f)=>s+f.brut,0);const caf=facs.reduce((s,f)=>s+f.caf,0);return`<tr><td><strong>${e.parent}</strong><br><span style="font-size:.68rem;color:var(--tx3);">${e.prenom} ${e.nom}</span></td><td><span class="tag tp" style="font-size:.58rem;">${e.qf}</span></td><td>${brut.toFixed(2)}€</td><td style="color:var(--gr);">−${caf.toFixed(2)}€</td><td><strong>${(brut-caf).toFixed(2)}€</strong></td></tr>`;}).join("")}<tr style="background:var(--bg);font-weight:700;"><td colspan="3">TOTAL</td><td style="color:var(--gr);">−${DB.factures.reduce((s,f)=>s+f.caf,0).toFixed(2)}€</td><td>${DB.factures.reduce((s,f)=>s+f.net,0).toFixed(2)}€</td></tr></tbody></table><div style="margin-top:11px;display:flex;gap:6px;"><button class="btn bp bsm" onclick="toast('📄 Bordereau généré')">📄 Générer</button><button class="btn bg2 bsm" onclick="toast('⬇ Excel')">⬇ Excel</button></div></div>`;}}
+function tabMairie(tab,el){document.querySelectorAll("#v-mairie .tab").forEach(t=>t.classList.remove("on"));el.classList.add("on");renderMairie(tab);}
+function genFacMairie(){closeM("m-facmairie");DB.facturesMairie.push({id:"FM-2026-"+String(DB.facturesMairie.length+1).padStart(3,"0"),dest:"Mairie de Ville",periode:"Mai 2026",montant:1560,statut:"En attente",date:new Date().toLocaleDateString("fr")});renderMairie("factures");toast("✅ Facture mairie générée");}
+
+// DOCUMENTS
+function renderDoc(tab){document.querySelectorAll("#v-documents .tab").forEach((t,i)=>{t.classList.toggle("on",["dossier","attestation","fiscal","reglement","pai"][i]===tab);});const el=document.getElementById("doc-content");if(tab==="dossier"){el.innerHTML=`<div class="card" style="padding:15px;"><div style="margin-bottom:11px;"><div style="font-weight:700;">Dossiers d'inscription</div><div style="font-size:.7rem;color:var(--tx3);">Un dossier incomplet bloque l'inscription et l'accueil de l'enfant</div></div><table><thead><tr><th>Enfant</th><th>Famille</th><th>PAI</th><th>Dossier</th><th>Manquant</th><th>Documents</th></tr></thead><tbody>${DB.enfants.map(e=>{const m=getDossier(e);return`<tr><td><strong>${e.prenom} ${e.nom}</strong></td><td>${e.parent}</td><td>${e.pai!=="Aucune"?"<span class=\"tag to\">⚠</span>":"—"}</td><td>${m.length===0?"<span class=\"tag tg\">✅ Complet</span>":"<span class=\"tag tr2\">⛔ Incomplet</span>"}</td><td style="font-size:.68rem;color:var(--rd);">${m.join(", ")||"—"}</td><td style="display:flex;gap:3px;"><button class="btn bg2 bsm" onclick="genFicheInscription(DB.enfants.find(x=>x.id===${e.id}))">📋</button><button class="btn bg2 bsm" onclick="genAutorisations(${e.id})">✍</button><button class="btn bg2 bsm" onclick="genFicheSanitaire(${e.id})">🏥</button></td></tr>`;}).join("")}</tbody></table></div>`;}else if(tab==="attestation"){el.innerHTML=`<div class="card" style="padding:15px;"><div style="margin-bottom:11px;font-weight:700;">Attestations de présence</div><table><thead><tr><th>Enfant</th><th>Responsable</th><th>Nb jours</th><th></th></tr></thead><tbody>${DB.enfants.filter(e=>e.statut==="Actif").map(e=>`<tr><td><strong>${e.prenom} ${e.nom}</strong></td><td>${e.parent}</td><td>18 jours — Avr 2026</td><td><button class="btn bg2 bsm" onclick="genAttPresence(${e.id})">📄</button></td></tr>`).join("")}</tbody></table><button class="btn bp bsm" style="margin-top:10px;" onclick="toast('📄 Toutes les attestations générées')">📄 Tout générer</button></div>`;}else if(tab==="fiscal"){el.innerHTML=`<div class="card" style="padding:15px;"><div style="margin-bottom:10px;"><div style="font-weight:700;">Attestations fiscales — Article 200 quater B CGI</div></div><div style="background:var(--accl);border-radius:7px;padding:8px 11px;font-size:.72rem;color:var(--acc);margin-bottom:11px;">📌 Crédit d'impôt 50% pour enfants &lt;6 ans.</div><table><thead><tr><th>Famille</th><th>Enfant</th><th>Total versé 2026</th><th>Éligibilité</th><th></th></tr></thead><tbody>${DB.enfants.filter(e=>e.statut==="Actif").map(e=>{const total=DB.factures.filter(f=>f.famille===e.nom).reduce((s,f)=>s+f.net,0);return`<tr><td><strong>${e.parent}</strong></td><td>${e.prenom} ${e.nom}</td><td><strong>${total.toFixed(2)}€</strong></td><td>${e.age<=6?"<span class=\"tag tg\">Crédit 50%</span>":"<span class=\"tag tb2\">Déduction</span>"}</td><td><button class="btn bgr bsm" onclick="genAttFiscaleE(${e.id})">📄</button></td></tr>`;}).join("")}</tbody></table><button class="btn bp bsm" style="margin-top:10px;" onclick="toast('📄 Toutes les att. fiscales générées')">📄 Tout générer 2026</button></div>`;}else if(tab==="reglement"){el.innerHTML=`<div class="card" style="padding:18px;max-width:640px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;"><div style="font-weight:800;">Règlement intérieur 2025–2026</div><button class="btn bp bsm" onclick="printReglement()">🖨</button></div><div style="font-size:.76rem;color:var(--tx2);line-height:1.8;"><strong>Art. 1 — Objet :</strong> Centre de loisirs associatif agréé J&S accueillant les 3–12 ans.<br><strong>Art. 2 — Inscription :</strong> Dossier complet OBLIGATOIRE. Dossier incomplet = refus d'accueil.<br><strong>Art. 3 — Adhésion :</strong> 28€/mois (tarif dégressif fratrie). Paiement OBLIGATOIRE avant présence.<br><strong>Art. 4 — Horaires :</strong> Matin 7h30–9h · Soir 16h30–19h · Mercredi 7h30–18h30 · Vacances 7h30–18h30.<br><strong>Art. 5 — Santé :</strong> Enfant malade non admis. Médicaments uniquement via PAI.<br><strong>Art. 6 — Facturation :</strong> Retard &gt;30j = suspension d'accueil.</div></div>`;}else if(tab==="pai"){el.innerHTML=`<div class="card" style="padding:15px;"><div style="margin-bottom:11px;font-weight:700;">Fiches sanitaires & PAI</div><table><thead><tr><th>Enfant</th><th>PAI</th><th>Médecin</th><th>Documents</th></tr></thead><tbody>${DB.enfants.map(e=>`<tr><td><strong>${e.prenom} ${e.nom}</strong></td><td>${e.pai!=="Aucune"?`<span class="tag to">${e.pai}</span>`:"—"}</td><td style="font-size:.72rem;color:var(--tx3);">${e.medecin}</td><td style="display:flex;gap:3px;"><button class="btn bg2 bsm" onclick="genFicheSanitaire(${e.id})">🏥</button>${e.pai!=="Aucune"?`<button class="btn bor bsm" onclick="toast('📋 PAI généré')">📋 PAI</button>`:""}</td></tr>`).join("")}</tbody></table></div>`;}}
+function tabDoc(tab,el){document.querySelectorAll("#v-documents .tab").forEach(t=>t.classList.remove("on"));el.classList.add("on");renderDoc(tab);}
+
+// EQUIPE
+function renderEq(){document.getElementById("teq").innerHTML=DB.equipe.map(a=>{const p=Math.min(Math.round(a.hE/(a.h*4.33)*100),100);const cr=a.congesTotal-a.congesPris;return`<tr><td><div class="av ${a.col}" style="width:24px;height:24px;font-size:.62rem;">${a.prenom[0]}${a.nom[0]}</div></td><td><strong>${a.prenom} ${a.nom}</strong><br><span style="font-size:.66rem;color:var(--tx3);">${a.email}</span></td><td>${a.poste}</td><td><span class="tag tb2" style="font-size:.58rem;">${a.diplome}</span></td><td><span class="tag ${a.contrat==="CDI"?"tg":a.contrat==="Stagiaire"?"tgr":"tt"}">${a.contrat}</span></td><td>${a.h}h</td><td><div style="display:flex;align-items:center;gap:5px;"><div class="pbar" style="width:60px;"><div class="pfill ${p>90?"por":"pgr2"}" style="width:${p}%"></div></div><span style="font-size:.68rem;">${a.hE}h</span></div></td><td>${a.taux>0?`<strong>${(a.hE*a.taux).toFixed(0)}€</strong>`:"Bénévole"}</td><td><span class="tag ${cr<5?"tr2":cr<10?"to":"tg"}" style="font-size:.58rem;">${cr}j/${a.congesTotal}</span></td><td><span class="tag ${a.statut==="Actif"?"tg":"to"}">${a.statut}</span></td><td><button class="btn bg2 bsm" onclick="printContrat(${a.id})">📋</button></td></tr>`;}).join("");}
+function addAnim(){const p=document.getElementById("ap").value.trim(),n=document.getElementById("an").value.trim();if(!p||!n){toast("⚠ Prénom et nom obligatoires");return;}const cols=["abl","agr","aor","apu","ate"];DB.equipe.push({id:Date.now(),prenom:p,nom:n,poste:document.getElementById("apo").value,diplome:document.getElementById("adip").value,contrat:document.getElementById("act").value,h:parseInt(document.getElementById("ah").value)||35,hE:0,taux:parseFloat(document.getElementById("ath").value)||11.88,email:document.getElementById("ae").value,tel:document.getElementById("at").value,deb:document.getElementById("adeb").value,fin:document.getElementById("afin").value,statut:"Actif",sm:document.getElementById("asm").value,ss2:document.getElementById("ass").value,mer:document.getElementById("amer").value,vac:document.getElementById("avac").value,col:cols[DB.equipe.length%5],pin:document.getElementById("apin").value||"0000",congesTotal:parseInt(document.getElementById("acong").value)||25,congesPris:0,coffre:document.getElementById("acoffre").value});document.getElementById("kv-q").textContent=DB.equipe.filter(a=>a.statut==="Actif").length;closeM("m-anim");renderEq();renderPins();addN("👥","Animateur ajouté",p+" "+n);toast("✅ "+p+" "+n+" ajouté·e");}
+
+// PLANNING
+function getLundi(off){const d=new Date();d.setDate(d.getDate()-d.getDay()+1+off*7);return d;}
+function renderPlan(){const lundi=getLundi(DB.planOffset);const jours=["Lundi","Mardi","Mercredi","Jeudi","Vendredi","Sam","Dim"];const dates=jours.map((_,i)=>{const d=new Date(lundi);d.setDate(lundi.getDate()+i);return d;});document.getElementById("psem").textContent="Semaine du "+lundi.toLocaleDateString("fr-FR",{day:"numeric",month:"long"})+" au "+dates[6].toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"});const actifs=DB.equipe.filter(a=>a.statut==="Actif");const nbE=DB.enfants.filter(e=>e.statut==="Actif").length;const ratio=Math.round(nbE/actifs.length*10)/10;const ok=ratio<=10;document.getElementById("enc-alert").innerHTML=`<div class="abox ${ok?"agr":"aor"}"><span>${ok?"✅":"⚠"}</span><div style="flex:1;"><div style="font-weight:700;font-size:.76rem;">Taux d'encadrement : 1 animateur pour ${ratio} enfants</div><div style="font-size:.68rem;color:var(--tx2);">Réglementation : 1/10 périscolaire · 1/14 mercredi · 1/12 vacances · 1/8 enfants &lt;6 ans</div></div><span class="enc ${ok?"eok":"ewarn"}">${ok?"✓ Conforme":"⚠ Vérifier"}</span></div>`;document.getElementById("plansum").innerHTML=`<div class="hsi"><div class="hsl">Animateurs actifs</div><div class="hsv">${actifs.length}</div></div><div class="hsi"><div class="hsl">H planifiées</div><div class="hsv">${actifs.reduce((s,a)=>s+a.h,0)}h</div></div><div class="hsi"><div class="hsl">Ratio encad.</div><div class="hsv">1/${ratio}</div></div><div class="hsi"><div class="hsl">Conformité DRAJES</div><div class="hsv" style="color:${ok?"var(--gr)":"var(--or)"};">${ok?"✅ OK":"⚠ NON"}</div></div>`;const defS={Lundi:[{h:"7h30–9h",t:"peri"},{h:"16h30–19h",t:"peri"}],Mardi:[{h:"7h30–9h",t:"peri"},{h:"16h30–19h",t:"peri"}],Mercredi:[{h:"7h30–18h30",t:"mer"}],Jeudi:[{h:"7h30–9h",t:"peri"},{h:"16h30–19h",t:"peri"}],Vendredi:[{h:"7h30–9h",t:"peri"},{h:"16h30–19h",t:"peri"}],Sam:[],Dim:[]};let html=`<div class="pgh">Animateur</div>${jours.map((j,i)=>`<div class="pgh">${j.substring(0,3)}<br><span style="font-size:.54rem;opacity:.55;">${dates[i].getDate()}/${dates[i].getMonth()+1}</span></div>`).join("")}`;DB.equipe.forEach(a=>{if(a.statut==="Congé"){html+=`<div class="pgn"><div class="av ${a.col}" style="width:19px;height:19px;font-size:.59rem;">${a.prenom[0]}${a.nom[0]}</div>${a.prenom}</div>`;html+=jours.map(()=>`<div class="pgc"><span class="pgs cng">Congé</span></div>`).join("");return;}html+=`<div class="pgn"><div class="av ${a.col}" style="width:19px;height:19px;font-size:.59rem;">${a.prenom[0]}${a.nom[0]}</div><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.68rem;">${a.prenom}</span></div>`;html+=jours.map(j=>{const slots=defS[j]||[];if(!slots.length)return`<div class="pgc"><span class="pgs rep">Repos</span></div>`;return`<div class="pgc">${slots.map(s=>`<span class="pgs ${s.t}">${s.h}</span>`).join("")}</div>`;}).join("");});document.getElementById("pgrid").innerHTML=html;document.getElementById("cra").innerHTML=DB.equipe.map(a=>`<option value="${a.id}">${a.prenom} ${a.nom}</option>`).join("");}
+function semP(){DB.planOffset--;renderPlan();}function semS(){DB.planOffset++;renderPlan();}function semA(){DB.planOffset=0;renderPlan();}
+function addCreneau(){closeM("m-creneau");toast("✅ Créneau ajouté");renderPlan();}
+function genPlanning(){const al=DB.equipe.filter(a=>a.statut==="Actif"&&(a.congesTotal-a.congesPris)<2);closeM("m-semtype");if(al.length)addN("⚠","Solde congés faible",al.map(a=>a.prenom).join(", "));toast("⚡ Planning généré ! Ratios vérifiés · Conformité DRAJES OK"+(al.length?" · ⚠ Congés faibles: "+al.map(a=>a.prenom).join(", "):""));renderPlan();}
+
+// HEURES VACANCES
+function renderVac(){const period=document.getElementById("vac-p").value;const jmap={"Vacances Toussaint (10j)":10,"Vacances Noël (10j)":10,"Vacances Hiver (10j)":10,"Vacances Printemps (10j)":10,"Vacances Été (40j)":40};const jours=jmap[period]||10;document.getElementById("vac-content").innerHTML=DB.equipe.filter(a=>a.statut==="Actif"&&a.vac==="Oui").map(a=>{const hJ=a.h/5,hTh=hJ*jours,cr=a.congesTotal-a.congesPris,hC=cr*hJ,hR=hTh-hC,alert=cr<3;return`<div class="hvac"><div style="display:flex;align-items:center;gap:9px;margin-bottom:10px;"><div class="av ${a.col}">${a.prenom[0]}${a.nom[0]}</div><div style="flex:1;font-weight:700;font-size:.84rem;">${a.prenom} ${a.nom} · <span style="font-size:.7rem;color:var(--tx3);">${a.poste}</span></div><span class="enc ${hR>0?"eok":"ewarn"}">${hR>0?"Disponible":"Insuffisant"}</span></div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:8px;"><div class="cd"><div class="cdl">H/jour</div><div class="cdv">${hJ.toFixed(1)}h</div></div><div class="cd"><div class="cdl">Jours vacances</div><div class="cdv">${jours}j</div></div><div class="cd"><div class="cdl">H théoriques</div><div class="cdv">${hTh.toFixed(1)}h</div></div><div class="cd"><div class="cdl">Congés rest.</div><div class="cdv" style="color:${alert?"var(--rd)":"var(--gr)"};">${cr}j/${a.congesTotal}</div></div><div class="cd"><div class="cdl">H congés à déduire</div><div class="cdv" style="color:var(--or);">−${hC.toFixed(1)}h</div></div><div class="cd"><div class="cdl">H disponibles réelles</div><div class="cdv" style="color:var(--acc);">${Math.max(0,hR).toFixed(1)}h</div></div><div class="cd"><div class="cdl">Salaire brut estimé</div><div class="cdv" style="color:var(--gr);">${a.taux>0?(Math.max(0,hR)*a.taux).toFixed(0)+"€":"Bénévole"}</div></div><div class="cd"><div class="cdl">H contrat/sem</div><div class="cdv">${a.h}h</div></div></div>${alert?`<div style="background:var(--rdl);border:1px solid var(--rd);border-radius:7px;padding:7px 10px;font-size:.72rem;color:var(--rd);font-weight:600;">⚠ Solde congés faible (${cr}j) — vérifier avant de planifier</div>`:`<div style="background:var(--grl);border:1px solid var(--gr);border-radius:7px;padding:7px 10px;font-size:.72rem;color:var(--gr);font-weight:600;">✅ Solde suffisant — ${cr}j disponibles</div>`}</div>`;}).join("")||"<div style="color:var(--tx3);text-align:center;padding:20px;">Aucun animateur disponible pour les vacances</div>";}
+function genPlanVac(){const al=DB.equipe.filter(a=>a.vac==="Oui"&&a.statut==="Actif"&&(a.congesTotal-a.congesPris)<2);if(al.length)addN("⚠","Congés insuffisants vacances",al.map(a=>a.prenom).join(", "));toast("⚡ Planning vacances généré !"+(al.length?" ⚠ "+al.length+" alerte(s) congés":""));}
+
+// CONTRATS
+function renderC(tab){document.querySelectorAll("#v-contrats .tab").forEach((t,i)=>{t.classList.toggle("on",["contrats","heures","conges","docs","coffre"][i]===tab);});const el=document.getElementById("cc");if(tab==="contrats"){el.innerHTML=DB.equipe.map(a=>`<div class="cc"><div class="cc-top"><div class="av ${a.col}">${a.prenom[0]}${a.nom[0]}</div><div style="flex:1;"><div class="cc-name">${a.prenom} ${a.nom}</div><div class="cc-role">${a.poste} · <span class="tag ${a.contrat==="CDI"?"tg":a.contrat==="Stagiaire"?"tgr":"tt"}">${a.contrat}</span></div></div><div style="display:flex;gap:4px;"><button class="btn bg2 bsm" onclick="printContrat(${a.id})">🖨</button><button class="btn bg2 bsm" onclick="toast('✏ Édition')">✏</button></div></div><div class="cc-det"><div class="cd"><div class="cdl">Diplôme</div><div class="cdv">${a.diplome}</div></div><div class="cd"><div class="cdl">Taux brut</div><div class="cdv">${a.taux>0?a.taux.toFixed(2)+"€/h":"Bénévole"}</div></div><div class="cd"><div class="cdl">H/semaine</div><div class="cdv">${a.h}h</div></div><div class="cd"><div class="cdl">Début</div><div class="cdv">${a.deb||"—"}</div></div><div class="cd"><div class="cdl">Fin</div><div class="cdv">${a.fin||"Indéterminé"}</div></div><div class="cd"><div class="cdl">Congés rest.</div><div class="cdv" style="color:${(a.congesTotal-a.congesPris)<5?"var(--rd)":"var(--gr)"};">${a.congesTotal-a.congesPris}j</div></div></div><div style="display:flex;justify-content:space-between;font-size:.72rem;margin-bottom:3px;"><span style="color:var(--tx3);">H effectuées : ${a.hE}h / ${Math.round(a.h*4.33)}h théoriques</span>${a.taux>0?`<span style="color:var(--gr);font-weight:700;">${(a.hE*a.taux).toFixed(2)}€ brut</span>`:""}</div><div class="pbar"><div class="pfill ${a.hE>a.h*4.33?"por":"pgr2"}" style="width:${Math.min(Math.round(a.hE/(a.h*4.33)*100),100)}%"></div></div></div>`).join("");}else if(tab==="heures"){el.innerHTML=`<div class="card"><div style="overflow-x:auto;"><table><thead><tr><th>Animateur</th><th>H contrat/mois</th><th>H effectuées</th><th>Écart</th><th>Taux</th><th>Salaire brut</th></tr></thead><tbody>${DB.equipe.map(a=>{const th=Math.round(a.h*4.33);const ec=a.hE-th;return`<tr><td><strong>${a.prenom} ${a.nom}</strong></td><td>${th}h</td><td><strong>${a.hE}h</strong></td><td><span class="tag ${ec>=0?"tg":"tr2"}">${ec>=0?"+":""}${ec}h</span></td><td>${a.taux>0?a.taux.toFixed(2)+"€":"—"}</td><td>${a.taux>0?`<strong>${(a.hE*a.taux).toFixed(2)}€</strong>`:"Bénévole"}</td></tr>`;}).join("")}</tbody></table></div></div>`;}else if(tab==="conges"){el.innerHTML=`<div class="card mb14"><div style="overflow-x:auto;"><table><thead><tr><th>Animateur</th><th>Total annuel</th><th>Pris</th><th>Restants</th><th>Alerte</th></tr></thead><tbody>${DB.equipe.map(a=>{const r=a.congesTotal-a.congesPris;return`<tr><td><strong>${a.prenom} ${a.nom}</strong></td><td>${a.congesTotal}j</td><td>${a.congesPris}j</td><td><strong style="color:${r<5?"var(--rd)":r<10?"var(--or)":"var(--gr)"};">${r}j</strong></td><td>${r<5?"<span class=\"tag tr2\">⚠ Faible</span>":r<10?"<span class=\"tag to\">Attention</span>":"<span class=\"tag tg\">OK</span>"}</td></tr>`;}).join("")}</tbody></table></div></div><div class="card"><div style="overflow-x:auto;"><table><thead><tr><th>Animateur</th><th>Type</th><th>Du</th><th>Au</th><th>Jours</th><th>Statut</th><th></th></tr></thead><tbody><tr><td><strong>Alex Mercier</strong></td><td>Congés payés</td><td>28/04</td><td>09/05</td><td>9j</td><td><span class="tag tg">Validé</span></td><td><button class="btn bg2 bsm">🖨</button></td></tr><tr><td><strong>Thomas Robert</strong></td><td>Récupération</td><td>15/05</td><td>15/05</td><td>1j</td><td><span class="tag to">En attente</span></td><td style="display:flex;gap:3px;"><button class="btn bgr bsm" onclick="toast('✅ Validé')">✓</button><button class="btn brd bsm" onclick="toast('❌ Refusé')">✗</button></td></tr></tbody></table></div></div>`;}else if(tab==="docs"){el.innerHTML=`<div class="g3">${DB.equipe.map(a=>`<div class="card" style="padding:12px;"><div style="display:flex;align-items:center;gap:8px;margin-bottom:9px;"><div class="av ${a.col}">${a.prenom[0]}${a.nom[0]}</div><div><div style="font-weight:700;font-size:.8rem;">${a.prenom} ${a.nom}</div><div style="font-size:.64rem;color:var(--tx3);">${a.contrat}</div></div></div><button class="btn bg2 bsm" onclick="printContrat(${a.id})" style="width:100%;justify-content:flex-start;margin-bottom:3px;">📄 Contrat</button><button class="btn bg2 bsm" onclick="toast('💶 Fiche de paie')" style="width:100%;justify-content:flex-start;margin-bottom:3px;">💶 Fiche de paie</button><button class="btn bg2 bsm" onclick="toast('📋 Attestation')" style="width:100%;justify-content:flex-start;margin-bottom:3px;">📋 Attestation</button><button class="btn bg2 bsm" onclick="toast('📑 Solde tout compte')" style="width:100%;justify-content:flex-start;">📑 Solde tout compte</button></div>`).join("")}</div>`;}else if(tab==="coffre"){el.innerHTML=DB.equipe.map(a=>`<div class="cf-card"><div style="display:flex;align-items:center;gap:9px;margin-bottom:10px;"><div class="av ${a.col}">${a.prenom[0]}${a.nom[0]}</div><div><div style="font-size:.9rem;font-weight:800;">${a.prenom} ${a.nom}</div><div style="font-size:.7rem;opacity:.55;">${a.poste} · PIN: ****</div></div></div><div class="cf-btns">${a.coffre?`<button class="cf-btn" onclick="window.open('${a.coffre}','_blank')">🔐 Bulletins de paie</button>`:"<span style=\"font-size:.72rem;opacity:.45;\">Aucun lien — ajouter dans la fiche</span>"}<button class="cf-btn" onclick="toast('💶 Documents RH')">💶 Documents RH</button><button class="cf-btn" onclick="toast('📧 Lien envoyé')">📧 Envoyer lien</button></div></div>`).join("");}}
+function tabC(tab,el){document.querySelectorAll("#v-contrats .tab").forEach(t=>t.classList.remove("on"));el.classList.add("on");renderC(tab);}
+function addContrat(){document.getElementById("cta").innerHTML=DB.equipe.map(a=>`<option value="${a.id}">${a.prenom} ${a.nom}</option>`).join("");closeM("m-contrat");toast("✅ Contrat créé");}
+
+// VUE ANIMATEUR
+function renderAnimView(){const a=DB.animateur;if(!a)return;document.getElementById("av-sub").textContent=a.prenom+" "+a.nom+" · "+a.poste+" — lecture seule";document.getElementById("av-nom").textContent=a.prenom+" "+a.nom;const jours=["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"];const defS={Lun:[{h:"7h30–9h",t:"peri"},{h:"16h30–19h",t:"peri"}],Mar:[{h:"7h30–9h",t:"peri"},{h:"16h30–19h",t:"peri"}],Mer:[{h:"7h30–18h30",t:"mer"}],Jeu:[{h:"7h30–9h",t:"peri"},{h:"16h30–19h",t:"peri"}],Ven:[{h:"7h30–9h",t:"peri"},{h:"16h30–19h",t:"peri"}],Sam:[],Dim:[]};const today=new Date().getDay();document.getElementById("av-week").innerHTML=jours.map((j,i)=>{const slots=defS[j]||[];const isTod=(i+1===today)||(i===0&&today===1);return`<div class="av-day ${isTod?"today":""}"><div class="av-day-n">${j}</div>${slots.length?slots.map(s=>`<div class="av-sl ${s.t}">${s.h}</div>`).join(""):"<div class=\"av-sl rep\">Repos</div>"}${a.statut==="Congé"?"<div class=\"av-sl cng\">Congé</div>":""}</div>`;}).join("");const myActs=DB.activites.filter(ac=>ac.anim.includes(a.prenom));document.getElementById("av-acts").innerHTML=myActs.length?myActs.map(ac=>`<div style="padding:8px 10px;background:var(--bg);border-radius:7px;margin-bottom:5px;"><div style="font-weight:700;font-size:.8rem;">${ac.nom}</div><div style="font-size:.68rem;color:var(--tx3);">${ac.horaire} · ${ac.groupe} · ${ac.inscrits}/${ac.max}</div></div>`).join(""):"<div style="color:var(--tx3);font-size:.76rem;">Aucune activité assignée</div>";const th=Math.round(a.h*4.33),p=Math.min(Math.round(a.hE/th*100),100),cr=a.congesTotal-a.congesPris;document.getElementById("av-hours").innerHTML=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px;"><div style="background:var(--bg);border-radius:7px;padding:9px;"><div style="font-size:.62rem;color:var(--tx3);font-weight:700;text-transform:uppercase;">H contrat/mois</div><div style="font-size:1rem;font-weight:800;">${th}h</div></div><div style="background:var(--bg);border-radius:7px;padding:9px;"><div style="font-size:.62rem;color:var(--tx3);font-weight:700;text-transform:uppercase;">H effectuées</div><div style="font-size:1rem;font-weight:800;color:var(--acc);">${a.hE}h</div></div><div style="background:var(--bg);border-radius:7px;padding:9px;"><div style="font-size:.62rem;color:var(--tx3);font-weight:700;text-transform:uppercase;">Congés restants</div><div style="font-size:1rem;font-weight:800;color:${cr<5?"var(--rd)":"var(--gr)"};">${cr}j</div></div><div style="background:var(--bg);border-radius:7px;padding:9px;"><div style="font-size:.62rem;color:var(--tx3);font-weight:700;text-transform:uppercase;">Salaire brut est.</div><div style="font-size:1rem;font-weight:800;color:var(--gr);">${a.taux>0?(a.hE*a.taux).toFixed(0)+"€":"Bénévole"}</div></div></div><div class="pbar"><div class="pfill pbl" style="width:${p}%"></div></div><div style="font-size:.66rem;color:var(--tx3);margin-top:3px;text-align:right;">${p}% des heures contractuelles</div>`;document.getElementById("av-docs").innerHTML=`<div style="display:flex;flex-direction:column;gap:6px;">${a.coffre?`<button class="btn bg2" onclick="window.open('${a.coffre}','_blank')" style="justify-content:flex-start;">🔐 Mes bulletins de paie</button>`:"<div style=\"font-size:.74rem;color:var(--tx3);\">Lien coffre-fort non configuré</div>"}<button class="btn bg2" onclick="toast('📄 Contrat disponible')" style="justify-content:flex-start;">📄 Mon contrat</button><button class="btn bg2" onclick="toast('📋 Attestation générée')" style="justify-content:flex-start;">📋 Attestation employeur</button></div>`;}
+
+// EMAILS
+let curEM=null;
+const catL={inscription:"📝 Inscription",paiement:"💶 Paiement",urgence:"🚨 Urgence",info:"ℹ Info",admin:"⚙ Admin"};
+const catC2={inscription:"tb2",paiement:"tg",urgence:"tr2",info:"tt",admin:"tgr"};
+function renderEM(f){let list=f?DB.emails.filter(e=>e.cat===f):DB.emails;document.getElementById("nb-m").textContent=DB.emails.filter(e=>e.unread).length||"";document.getElementById("el").innerHTML=list.map(e=>`<div class="eitem ${e.unread?"unr":""} ${curEM===e.id?"on":""}" onclick="openEM(${e.id})"><span class="etim">${e.time}</span><div class="esnd">${e.from}</div><div class="esbj">${e.subj}</div><div class="eprev">${e.prev}</div></div>`).join("");}
+function filterEM(v){renderEM(v);}
+function openEM(id){curEM=id;const e=DB.emails.find(x=>x.id===id);e.unread=false;document.getElementById("nb-m").textContent=DB.emails.filter(x=>x.unread).length||"";renderEM();const act=e.cat==="inscription"?`<button class="btn bp bsm" onclick="trInsc(${e.id})">📝 Créer inscription</button>`:e.cat==="paiement"?`<button class="btn bgr bsm" onclick="toast('✅ Paiement enregistré')">💶 Enregistrer</button>`:"";document.getElementById("eb").innerHTML=`<div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px;"><span class="tag ${catC2[e.cat]||"tgr"}">${catL[e.cat]||e.cat}</span>${e.tr?"<span class=\"tag tg\">✓ Transféré</span>":""}</div><h2 style="font-size:.9rem;font-weight:800;margin-bottom:4px;">${e.subj}</h2><div style="font-size:.68rem;color:var(--tx3);margin-bottom:12px;">De : <strong>${e.from}</strong> &lt;${e.mail}&gt; · ${e.date} ${e.time}</div><div style="display:flex;gap:5px;margin-bottom:12px;">${act}<button class="btn bg2 bsm" onclick="toast('↩ Réponse envoyée')">↩ Répondre</button><button class="btn bg2 bsm" onclick="toast('📁 Archivé')">📁</button></div><div style="font-size:.78rem;color:var(--tx2);line-height:1.7;">${e.body.replace(/\n/g,"<br>")}</div>`;}
+function trInsc(id){const e=DB.emails.find(x=>x.id===id);e.tr=true;toast("✅ Inscription transférée — En attente de validation");addN("📝","Inscription depuis email","En attente");openEM(id);}
+function simEmail(){const ns=[["Emma","Blanc"],["Théo","Garnier"],["Inès","Rousseau"]];const n=ns[Math.floor(Math.random()*ns.length)];DB.emails.unshift({id:Date.now(),from:"Parent de "+n[0],mail:"parent@email.fr",subj:"[Site] Pré-inscription — "+n[0]+" "+n[1],prev:"[AUTO] Nouvelle pré-inscription…",body:"[AUTO — site internet]\n\nEnfant : "+n[0]+" "+n[1]+"\nPériode : Périscolaire + Mercredi\nAjouté automatiquement en attente.",time:new Date().toLocaleTimeString("fr",{hour:"2-digit",minute:"2-digit"}),date:"Aujourd'hui",cat:"inscription",unread:true,tr:false});DB.enfants.push({id:Date.now()+1,prenom:n[0],nom:n[1],age:5+Math.floor(Math.random()*7),groupe:"Moyens (6-8 ans)",parent:"Parent "+n[1],tel:"—",email:"parent@email.fr",qf:"À définir",fratrie:0,pai:"Aucune",urgence:"",urg2:"",periode:"Périscolaire + Mercredi",sortie:"Non",photo:"Oui",autorise:"",statut:"En attente",source:"site",medecin:"—",ss:"",sg:"",assu:"Non fournie"});document.getElementById("kv-e").textContent=DB.enfants.length;renderEM();addN("📨","Pré-inscription "+n[0]+" "+n[1],"Via site — dossier incomplet");toast("📨 Mail reçu — "+n[0]+" "+n[1]+" ajouté·e (dossier incomplet)");}
+
+// NOTIFS
+function renderN(){document.getElementById("nl").innerHTML=DB.notifs.map(n=>`<div class="ni2 ${n.unread?"unr":""}"><span style="font-size:.9rem;">${n.ico}</span><div class="ni2t"><strong>${n.title}</strong>${n.text}<div class="ni2tm">${n.time}</div></div></div>`).join("");document.getElementById("ndot").style.display=DB.notifs.filter(n=>n.unread).length?"block":"none";}
+function addN(ico,title,text){DB.notifs.unshift({ico,title,text,time:"À l'instant",unread:true});renderN();}
+function toggleNP(){document.getElementById("np").classList.toggle("open");}
+function clearN(){DB.notifs.forEach(n=>n.unread=false);renderN();toast("✓ Notifications lues");}
+document.addEventListener("click",e=>{if(!e.target.closest("#np")&&!e.target.closest("#nbtn"))document.getElementById("np").classList.remove("open");});
+
+// MODAL
+function openM(id){document.getElementById(id).classList.add("open");if(id==="m-facture")document.getElementById("ff").innerHTML=DB.enfants.filter(e=>e.statut==="Actif").map(e=>`<option>${e.parent} (${e.prenom})</option>`).join("");if(id==="m-adhesion")document.getElementById("adh-fam").innerHTML=DB.enfants.map(e=>`<option value="${e.id}">${e.parent} (${e.prenom} ${e.nom})</option>`).join("");if(id==="m-creneau")document.getElementById("cra").innerHTML=DB.equipe.map(a=>`<option value="${a.id}">${a.prenom} ${a.nom}</option>`).join("");if(id==="m-contrat")document.getElementById("cta").innerHTML=DB.equipe.map(a=>`<option value="${a.id}">${a.prenom} ${a.nom}</option>`).join("");if(id==="m-activite")document.getElementById("acr").innerHTML=DB.equipe.map(a=>`<option>${a.prenom} ${a.nom[0]}.</option>`).join("");if(id==="m-semtype"){const actifs=DB.equipe.filter(a=>a.statut==="Actif");const ratio=Math.round(DB.enfants.filter(e=>e.statut==="Actif").length/actifs.length*10)/10;const al=actifs.filter(a=>(a.congesTotal-a.congesPris)<2);document.getElementById("enc-preview").innerHTML=`<div class="abox ${ratio<=10?"agr":"aor"}"><span>${ratio<=10?"✅":"⚠"}</span><span style="font-size:.74rem;">Ratio : 1/${ratio} · ${actifs.filter(a=>a.sm==="Oui").length} animateurs dispo matin · ${actifs.filter(a=>a.ss2==="Oui").length} le soir</span></div>${al.length?`<div class="abox ard" style="margin-top:5px;"><span>⚠</span><span style="font-size:.72rem;color:var(--rd);">Congés faibles : ${al.map(a=>a.prenom).join(", ")}</span></div>`:""}`;};}
+function closeM(id){document.getElementById(id).classList.remove("open");}
+document.querySelectorAll(".mbg").forEach(m=>m.addEventListener("click",e=>{if(e.target===m)m.classList.remove("open");}));
+
+// PINS
+function renderPins(){const el=document.getElementById("pins-list");if(!el)return;el.innerHTML=DB.equipe.map(a=>`<div style="display:flex;align-items:center;gap:9px;margin-bottom:6px;"><div class="av ${a.col}" style="width:24px;height:24px;font-size:.62rem;">${a.prenom[0]}${a.nom[0]}</div><span style="flex:1;font-size:.76rem;font-weight:600;">${a.prenom} ${a.nom}</span><input type="password" value="${a.pin}" maxlength="4" style="width:65px;padding:4px 7px;background:var(--bg);border:1px solid var(--bd);border-radius:5px;font-family:JetBrains Mono;font-size:.76rem;text-align:center;" onchange="DB.equipe.find(x=>x.id===${a.id}).pin=this.value"></div>`).join("");}
+
+// TOAST
+let tt;function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");clearTimeout(tt);tt=setTimeout(()=>t.classList.remove("show"),3100);}
+
+// PRINT
+function printDocW(html){const w=window.open("","_blank","width=800,height=750");w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet"><style>*{margin:0;padding:0;box-sizing:border-box;}body{font-family:Sora,sans-serif;background:#f0f4f8;padding:32px;}.doc{background:#fff;max-width:700px;margin:0 auto;border-radius:10px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.1);}.top{background:linear-gradient(135deg,#0E1B2E,#1A5FD4);color:#fff;padding:20px 28px;}.top h1{font-size:1.05rem;font-weight:800;}.top p{opacity:.6;font-size:.73rem;margin-top:2px;}.body{padding:22px 28px;}.foot{background:#f8fafc;padding:10px 28px;font-size:.64rem;color:#94a3b8;text-align:center;border-top:1px solid #e2e8f0;}h2{font-size:.82rem;color:#1A5FD4;margin:12px 0 5px;}p{font-size:.73rem;color:#475569;line-height:1.7;}.field{display:flex;margin-bottom:4px;}.fl{font-size:.69rem;color:#94a3b8;font-weight:700;width:180px;flex-shrink:0;}.fv{font-size:.72rem;color:#0f172a;font-weight:700;}table{width:100%;border-collapse:collapse;margin:11px 0;}th{background:#1A5FD4;color:#fff;padding:6px 9px;font-size:.66rem;text-align:left;}td{padding:6px 9px;border-bottom:1px solid #e2e8f0;font-size:.7rem;color:#475569;}.sign{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:24px;}.sbox{border-top:2px solid #e2e8f0;padding-top:7px;font-size:.66rem;color:#94a3b8;}@media print{body{background:#fff;padding:0;}.doc{box-shadow:none;}button{display:none;}}</style></head><body><div class="doc"><div class="top"><div style="display:flex;justify-content:space-between;align-items:flex-start;"><div><h1>🌿 ${DB.centre.nom}</h1><p>Centre de loisirs associatif · ${DB.centre.adresse}</p></div><div style="text-align:right;font-size:.67rem;opacity:.6;">${new Date().toLocaleDateString("fr-FR")}</div></div></div><div class="body">${html}</div><div class="foot">${DB.centre.nom} · Association loi 1901 · Agrément Jeunesse & Sports</div></div><div style="text-align:center;margin-top:14px;"><button onclick="window.print()" style="padding:8px 20px;background:#1A5FD4;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:.8rem;font-weight:600;font-family:Sora,sans-serif;">🖨 Imprimer / PDF</button></div></body></html>`);w.document.close();}
+
+function genFicheInscription(e){if(!e)return;printDocW(`<h2>Fiche d'inscription ${new Date().getFullYear()}–${new Date().getFullYear()+1}</h2><div class="field"><span class="fl">Prénom / Nom</span><span class="fv">${e.prenom} ${e.nom}</span></div><div class="field"><span class="fl">Âge</span><span class="fv">${e.age} ans</span></div><div class="field"><span class="fl">Groupe</span><span class="fv">${e.groupe}</span></div><div class="field"><span class="fl">Groupe sanguin</span><span class="fv">${e.sg||"À compléter"}</span></div><div class="field"><span class="fl">N° Sécurité sociale</span><span class="fv">${e.ss||"À compléter"}</span></div><div class="field"><span class="fl">PAI / Allergie</span><span class="fv">${e.pai}</span></div><div class="field"><span class="fl">Médecin traitant</span><span class="fv">${e.medecin||"—"}</span></div><h2>Responsable légal</h2><div class="field"><span class="fl">Nom</span><span class="fv">${e.parent}</span></div><div class="field"><span class="fl">Téléphone</span><span class="fv">${e.tel}</span></div><div class="field"><span class="fl">Email</span><span class="fv">${e.email}</span></div><div class="field"><span class="fl">Urgence 1</span><span class="fv">${e.urgence}</span></div><div class="field"><span class="fl">Urgence 2</span><span class="fv">${e.urg2||"—"}</span></div><h2>Modalités</h2><div class="field"><span class="fl">Période</span><span class="fv">${e.periode}</span></div><div class="field"><span class="fl">QF / Tarif</span><span class="fv">${getTarif(e)}</span></div><div class="field"><span class="fl">Adhésion mensuelle</span><span class="fv">${e.fratrie>0?"21€ (fratrie)":"28€"}</span></div><div class="field"><span class="fl">Assurance RC</span><span class="fv">${e.assu}</span></div><div class="field"><span class="fl">Sortie seul</span><span class="fv">${e.sortie}</span></div><div class="field"><span class="fl">Autorisation photos</span><span class="fv">${e.photo}</span></div><div class="field"><span class="fl">Personnes autorisées</span><span class="fv">${e.autorise||"—"}</span></div><div class="sign"><div class="sbox">Signature responsable légal<br><br><br>Lu et approuvé — Date : ___________</div><div class="sbox">Cachet centre<br><br><br>Date : ___________</div></div>`);}
+function genAutorisations(id){const e=DB.enfants.find(x=>x.id===id);if(!e)return;printDocW(`<h2>Autorisations parentales — ${e.prenom} ${e.nom}</h2><p style="margin-bottom:10px;">Je soussigné·e <strong>${e.parent}</strong>, responsable légal·e de <strong>${e.prenom} ${e.nom}</strong> :</p><table><thead><tr><th>Autorisation</th><th>Décision</th></tr></thead><tbody><tr><td>Sortie seul·e du centre</td><td><strong>${e.sortie==="Oui"?"✓ AUTORISÉ":"✗ NON AUTORISÉ"}</strong></td></tr><tr><td>Photographies / vidéos</td><td><strong>${(e.photo||"Non")==="Oui"?"✓ AUTORISÉ":"✗ NON AUTORISÉ"}</strong></td></tr><tr><td>Sorties extérieures</td><td><strong>✓ AUTORISÉ</strong></td></tr><tr><td>Transport véhicule collectif</td><td><strong>✓ AUTORISÉ</strong></td></tr><tr><td>Personnes autorisées à récupérer</td><td><strong>${e.autorise||e.parent}</strong></td></tr></tbody></table><div class="sign"><div class="sbox">Signature responsable légal<br><br><br>${e.parent} — Date : ___________</div><div class="sbox">Signature centre<br><br><br>Date : ___________</div></div>`);}
+function genFicheSanitaire(id){const e=DB.enfants.find(x=>x.id===id);if(!e)return;printDocW(`<h2>Fiche sanitaire de liaison — ${e.prenom} ${e.nom}</h2><div class="field"><span class="fl">Enfant</span><span class="fv">${e.prenom} ${e.nom} — ${e.age} ans</span></div><div class="field"><span class="fl">Groupe sanguin</span><span class="fv">${e.sg||"À compléter"}</span></div><div class="field"><span class="fl">N° Sécurité sociale</span><span class="fv">${e.ss||"À compléter"}</span></div><div class="field"><span class="fl">PAI / Allergies</span><span class="fv">${e.pai}</span></div><div class="field"><span class="fl">Médecin traitant</span><span class="fv">${e.medecin||"À compléter"}</span></div><div class="field"><span class="fl">Urgence 1</span><span class="fv">${e.urgence}</span></div><div class="field"><span class="fl">Urgence 2</span><span class="fv">${e.urg2||"—"}</span></div><div class="field"><span class="fl">Assurance</span><span class="fv">${e.assu}</span></div><p style="margin-top:10px;font-size:.68rem;color:#94a3b8;">Document confidentiel — conservé par le directeur·rice.</p><div class="sign"><div class="sbox">Signature responsable légal<br><br><br>Date : ___________</div><div class="sbox">Cachet centre<br><br><br>Date : ___________</div></div>`);}
+function genAttPresence(id){const e=DB.enfants.find(x=>x.id===id);printDocW(`<h2>Attestation de présence</h2><p style="margin-bottom:10px;">Nous soussignés, <strong>${DB.centre.nom}</strong>, certifions que :</p><div class="field"><span class="fl">Enfant</span><span class="fv">${e.prenom} ${e.nom}</span></div><div class="field"><span class="fl">Responsable</span><span class="fv">${e.parent}</span></div><div class="field"><span class="fl">A fréquenté</span><span class="fv">18 jours en Avril 2026</span></div><div class="field"><span class="fl">Période</span><span class="fv">Avril 2026 — Accueil périscolaire</span></div><p style="margin-top:12px;">Attestation établie pour valoir ce que de droit.</p><div class="sign"><div class="sbox">Cachet et signature<br><br><br>Date : ${new Date().toLocaleDateString("fr-FR")}</div><div class="sbox"></div></div>`);}
+function genAttFiscale(facId){const f=DB.factures.find(x=>x.id===facId);printDocW(`<h2>Attestation fiscale — ${f.annee||2026}</h2><p style="margin-bottom:10px;">Attestation de sommes versées — Article 200 quater B CGI.</p><div class="field"><span class="fl">Organisme</span><span class="fv">${DB.centre.nom}</span></div><div class="field"><span class="fl">Famille</span><span class="fv">${f.famille}</span></div><div class="field"><span class="fl">Enfant</span><span class="fv">${f.enfant}</span></div><div class="field"><span class="fl">Période</span><span class="fv">${f.periode}</span></div><div class="field"><span class="fl">Total versé net</span><span class="fv"><strong>${f.net.toFixed(2)}€</strong></span></div><p style="margin-top:10px;font-size:.68rem;color:#94a3b8;">À conserver et reporter sur votre déclaration. Crédit d'impôt 50% pour enfants &lt;6 ans.</p><div class="sign"><div class="sbox">Cachet et signature<br><br><br>${DB.centre.nom} — ${new Date().toLocaleDateString("fr-FR")}</div><div class="sbox"></div></div>`);}
+function genAttFiscaleE(id){const e=DB.enfants.find(x=>x.id===id);const total=DB.factures.filter(f=>f.famille===e.nom).reduce((s,f)=>s+f.net,0);printDocW(`<h2>Attestation fiscale annuelle 2026</h2><div class="field"><span class="fl">Organisme</span><span class="fv">${DB.centre.nom}</span></div><div class="field"><span class="fl">Famille</span><span class="fv">${e.parent}</span></div><div class="field"><span class="fl">Enfant</span><span class="fv">${e.prenom} ${e.nom} (${e.age} ans)</span></div><div class="field"><span class="fl">Total versé 2026</span><span class="fv"><strong>${total.toFixed(2)}€</strong></span></div><div class="field"><span class="fl">Éligibilité</span><span class="fv">${e.age<=6?"✓ Crédit impôt 50% (enfant &lt;6 ans)":"Déductible frais de garde"}</span></div><p style="margin-top:10px;font-size:.68rem;color:#94a3b8;">À reporter sur votre déclaration 2026.</p><div class="sign"><div class="sbox">Cachet et signature<br><br><br>${DB.centre.nom} — ${new Date().toLocaleDateString("fr-FR")}</div><div class="sbox"></div></div>`);}
+function printFac(id){const f=DB.factures.find(x=>x.id===id);printDocW(`<div style="display:flex;justify-content:space-between;margin-bottom:16px;"><div></div><div style="text-align:right;"><div style="font-size:1.2rem;font-weight:800;color:#1A5FD4;">${f.id}</div><div style="font-size:.7rem;color:#94a3b8;">Émise le ${f.date}</div></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:16px;"><div><strong style="font-size:.65rem;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;">Émetteur</strong><p>${DB.centre.nom}<br>Association loi 1901<br>${DB.centre.adresse}</p></div><div><strong style="font-size:.65rem;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;">Destinataire</strong><p>Famille ${f.famille}<br>Enfant : ${f.enfant}<br>Période : ${f.periode}</p></div></div><table><thead><tr><th>Prestation</th><th>Qté</th><th>P.U.</th><th>Total</th></tr></thead><tbody><tr><td>Accueil périscolaire matin</td><td>18j</td><td>2,50€</td><td>45,00€</td></tr><tr><td>Accueil périscolaire soir</td><td>18j</td><td>2,50€</td><td>45,00€</td></tr><tr><td>Repas</td><td>14</td><td>3,50€</td><td>49,00€</td></tr><tr><td>Goûter</td><td>18</td><td>1,20€</td><td>21,60€</td></tr><tr><td>Adhésion mensuelle</td><td>1</td><td>${f.adh}€</td><td>${f.adh}€</td></tr></tbody></table><div style="text-align:right;padding:9px 0;"><div style="font-size:.75rem;display:flex;justify-content:flex-end;gap:44px;padding:2px 0;">Sous-total<span>${f.brut.toFixed(2)}€</span></div><div style="font-size:.75rem;display:flex;justify-content:flex-end;gap:44px;padding:2px 0;">Adhésion<span>+${f.adh}€</span></div>${f.caf>0?`<div style="font-size:.75rem;color:#059669;display:flex;justify-content:flex-end;gap:44px;padding:2px 0;">Déduction CAF (30%)<span>−${f.caf.toFixed(2)}€</span></div>`:""}<div style="font-size:.88rem;font-weight:800;border-top:2px solid #1A5FD4;margin-top:5px;padding-top:6px;display:flex;justify-content:flex-end;gap:44px;">TOTAL NET À PAYER<span>${f.net.toFixed(2)}€</span></div></div><p style="font-size:.66rem;color:#94a3b8;margin-top:10px;">Paiement par chèque à l'ordre de «${DB.centre.nom}» ou virement. Rappeler le n° de facture.</p>`);}
+function printContrat(id){const a=DB.equipe.find(x=>x.id===id);if(!a)return;printDocW(`<h2>Contrat de travail — ${a.contrat}</h2><h2>Art. 1 — Parties</h2><div class="field"><span class="fl">Employeur</span><span class="fv">${DB.centre.nom}, Association loi 1901</span></div><div class="field"><span class="fl">Salarié·e</span><span class="fv">${a.prenom} ${a.nom}</span></div><div class="field"><span class="fl">Poste</span><span class="fv">${a.poste}</span></div><div class="field"><span class="fl">Diplôme</span><span class="fv">${a.diplome}</span></div><h2>Art. 2 — Durée</h2><p>Contrat <strong>${a.contrat}</strong>.${a.fin?" Prend fin le <strong>"+a.fin+"</strong>.":" Durée indéterminée."}</p><div class="field"><span class="fl">Début</span><span class="fv">${a.deb||"—"}</span></div><h2>Art. 3 — Temps de travail</h2><div class="field"><span class="fl">H/semaine</span><span class="fv">${a.h}h</span></div><div class="field"><span class="fl">Taux horaire brut</span><span class="fv">${a.taux>0?a.taux.toFixed(2)+"€/h":"Bénévole"}</span></div><div class="field"><span class="fl">Salaire brut mensuel</span><span class="fv">${a.taux>0?(a.h*4.33*a.taux).toFixed(2)+"€":"Indemnités"}</span></div><div class="field"><span class="fl">Congés annuels</span><span class="fv">${a.congesTotal} jours</span></div><h2>Art. 4 — Convention collective</h2><p>Convention Collective Nationale de l'Animation (ECLAT — IDCC 1518).</p><div class="sign"><div class="sbox">Signature employeur<br><br><br>${DB.centre.nom} — Date : ___________</div><div class="sbox">Signature salarié·e<br><br><br>${a.prenom} ${a.nom} — Date : ___________</div></div>`);}
+function printReglement(){printDocW(`<h2>Règlement intérieur 2025–2026</h2><p><strong>Art. 1 — Objet :</strong> ${DB.centre.nom} est une association loi 1901 agréée J&S accueillant les 3–12 ans.</p><p><strong>Art. 2 — Inscription :</strong> Dossier complet OBLIGATOIRE. Dossier incomplet = refus d'accueil.</p><p><strong>Art. 3 — Adhésion :</strong> 28€/mois (tarif dégressif fratrie). Paiement OBLIGATOIRE avant présence.</p><p><strong>Art. 4 — Horaires :</strong> Matin 7h30–9h · Soir 16h30–19h · Mercredi 7h30–18h30 · Vacances 7h30–18h30.</p><p><strong>Art. 5 — Santé :</strong> Enfant malade non admis. Médicaments uniquement via PAI médecin.</p><p><strong>Art. 6 — Facturation :</strong> Retard &gt;30j = suspension d'accueil.</p><div class="sign"><div class="sbox">Signature responsable légal<br><br><br>Lu et approuvé — Date : ___________</div><div class="sbox">Cachet centre<br><br><br>Date : ___________</div></div>`);}
+
+function printList(){toast("🖨 Liste imprimée");}
+
+// INIT
+document.addEventListener("DOMContentLoaded",()=>{renderN();renderPU();renderPins();document.getElementById("dd").textContent=new Date().toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"long",year:"numeric"});});
+</script>
+</body>
+</html>
